@@ -13,7 +13,7 @@ datasource db {
 model Cliente {
   id        Int      @id @default(autoincrement())
   nome      String
-  cpfCnpj   String
+  cpfCnpj   String   @unique
   telefone  String
   pedidos   Pedido[]
   historicos HistoricoMensagem[]
