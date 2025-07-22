@@ -1,0 +1,185 @@
+{
+  "dia": { "sucesso": 12, "erro": 2 },
+  "semana": { "sucesso": 80, "erro": 7 },
+  "mes": { "sucesso": 320, "erro": 21 },
+  "ultimos": [
+    {
+      "data": "2025-07-22 09:10",
+      "cliente": "João Silva",
+      "telefone": "+55 11 91234-5678",
+      "canal": "WhatsApp",
+      "mensagem": "Olá João, seu pedido foi enviado!",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-22 08:55",
+      "cliente": "Maria Souza",
+      "telefone": "+55 21 99876-5432",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Maria, houve um erro no envio.",
+      "status": "erro",
+      "statusDetalhado": "Número inválido",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 17:30",
+      "cliente": "Carlos Lima",
+      "telefone": "+55 31 98765-4321",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Carlos, sua assinatura foi renovada.",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 16:10",
+      "cliente": "Ana Paula",
+      "telefone": "+55 41 91234-5678",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Ana, seu boleto está disponível.",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 15:00",
+      "cliente": "Pedro Santos",
+      "telefone": "+55 51 99876-5432",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Pedro, não foi possível entregar sua mensagem.",
+      "status": "erro",
+      "statusDetalhado": "Falha de conexão",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 14:45",
+      "cliente": "Lucas Pereira",
+      "status": "sucesso",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 14:30",
+      "cliente": "Fernanda Costa",
+      "status": "sucesso",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 14:15",
+      "cliente": "Rafael Almeida",
+      "status": "erro",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 14:00",
+      "cliente": "Juliana Ramos",
+      "status": "sucesso",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 13:45",
+      "cliente": "Bruno Martins",
+      "status": "sucesso",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 13:30",
+      "cliente": "Patrícia Dias",
+      "status": "erro",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 13:15",
+      "cliente": "Eduardo Nunes",
+      "status": "sucesso",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 13:00",
+      "cliente": "Camila Rocha",
+      "status": "sucesso",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 12:45",
+      "cliente": "Vinícius Teixeira",
+      "telefone": "+55 19 91234-5678",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Vinícius, houve um erro no envio.",
+      "status": "erro",
+      "statusDetalhado": "Mensagem bloqueada",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 12:30",
+      "cliente": "Sofia Carvalho",
+      "telefone": "+55 85 99876-5432",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Sofia, seu cadastro foi realizado.",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 12:15",
+      "cliente": "Felipe Torres",
+      "telefone": "+55 62 98765-4321",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Felipe, não foi possível entregar sua mensagem.",
+      "status": "erro",
+      "statusDetalhado": "Falha de autenticação",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 12:00",
+      "cliente": "Larissa Melo",
+      "telefone": "+55 71 91234-5678",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Larissa, seu pagamento foi confirmado.",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 11:45",
+      "cliente": "Gabriel Freitas",
+      "telefone": "+55 98 99876-5432",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Gabriel, houve um erro no envio.",
+      "status": "erro",
+      "statusDetalhado": "Número bloqueado",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 11:30",
+      "cliente": "Isabela Fernandes",
+      "telefone": "+55 13 98765-4321",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Isabela, sua mensagem foi entregue.",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 11:15",
+      "cliente": "Rodrigo Barros",
+      "telefone": "+55 16 91234-5678",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Rodrigo, houve um erro no envio.",
+      "status": "erro",
+      "statusDetalhado": "Timeout",
+      "tipo": "whatsapp"
+    },
+    {
+      "data": "2025-07-21 11:00",
+      "cliente": "Amanda Castro",
+      "telefone": "+55 14 99876-5432",
+      "canal": "WhatsApp",
+      "mensagem": "Olá Amanda, seu pedido foi enviado!",
+      "status": "sucesso",
+      "statusDetalhado": "Entregue",
+      "tipo": "whatsapp"
+    }
+  ]
+}
