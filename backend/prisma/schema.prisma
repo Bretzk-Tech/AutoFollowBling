@@ -1,0 +1,37 @@
+// Prisma schema for AutoFollowBling
+// Models: Cliente, Pedido, HistoricoMensagem
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  cpfCnpj   String
+  telefone  String
+  pedidos   Pedido[]
+  historicos HistoricoMensagem[]
+}
+
+model Pedido {
+  id         Int      @id @default(autoincrement())
+  cliente    Cliente  @relation(fields: [clienteId], references: [id])
+  clienteId  Int
+  dataPedido DateTime
+  valor      Float
+  status     String
+}
+
+model HistoricoMensagem {
+  id         Int      @id @default(autoincrement())
+  cliente    Cliente  @relation(fields: [clienteId], references: [id])
+  clienteId  Int
+  dataEnvio  DateTime
+  tipo       String
+}
