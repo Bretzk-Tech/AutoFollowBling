@@ -1,3 +1,23 @@
+export const PaginationControls = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+  gap: 16px;
+`
+export const ChartWrapper = styled.div`
+  width: 100%;
+  background: #232946;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px #23294644;
+  padding: 32px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 900px;
+`
 export const PaginationInfo = styled.span`
   font-weight: 700;
   font-size: 17px;
@@ -76,12 +96,13 @@ export const Container = styled.div`
 `
 
 export const Sidebar = styled.aside`
-  width: 240px;
-  background: linear-gradient(120deg, #232946 80%, #1a1a2e 100%);
+  width: 250px;
+  max-width: 250px;
+  background: linear-gradient(120deg, #181c2a 0%, #232946 100%);
   color: #fff;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 32px 0 18px 0;
   min-height: 100vh;
   position: fixed;
@@ -92,6 +113,7 @@ export const Sidebar = styled.aside`
   border-bottom-right-radius: 18px;
   box-shadow: 0 4px 24px #00000022;
   gap: 16px;
+  padding: 24px 12px;
 `
 
 export const SidebarLogo = styled.div`
@@ -107,7 +129,7 @@ export const SidebarLogo = styled.div`
 
 export const SidebarNav = styled.nav`
   width: 100%;
-  padding-left: 24px;
+  padding: 0 24px;
 `
 
 export const SidebarList = styled.ul`
@@ -115,27 +137,36 @@ export const SidebarList = styled.ul`
   padding: 0;
   margin: 0;
   width: 100%;
+  gap: 12px;
 `
 
 interface SidebarItemProps {
   active?: boolean
 }
 export const SidebarItem = styled.li<SidebarItemProps>`
-  padding: 12px 24px;
-  font-size: 17px;
-  color: ${({ active }) => (active ? '#f6e35e' : '#e0e0e0')};
+  padding: 10px 20px;
+  font-size: 16px;
+  color: ${({ active }) => (active ? '#fff' : '#bfc8e2')};
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  border-left: 4px solid ${({ active }) => (active ? '#f6e35e' : 'transparent')};
+  transition: background 0.18s, color 0.18s;
   display: flex;
   align-items: center;
+  width: 100%;
+  max-width: 210px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-radius: 8px;
-  user-select: none;
-  letter-spacing: 0.1px;
-  background: ${({ active }) => (active ? 'rgba(246, 227, 94, 0.12)' : 'none')};
-  box-shadow: ${({ active }) => (active ? '0 2px 8px #f6e35e22' : 'none')};
+  background: ${({ active }) => (active ? 'rgba(108,99,255,0.10)' : 'none')};
+  border: none;
+  gap: 8px;
+  & svg,
+  & span[role='img'] {
+    color: ${({ active }) => (active ? '#6c63ff' : '#bfc8e2')};
+    background: none;
+    border-radius: 6px;
+    margin-right: 6px;
+    transition: color 0.18s;
+  }
 `
 
 export const SidebarVersion = styled.div`

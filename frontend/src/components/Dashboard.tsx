@@ -27,7 +27,9 @@ import {
   FilterButton,
   TableWrapper,
   PaginationButton,
-  PaginationInfo
+  PaginationInfo,
+  ChartWrapper,
+  PaginationControls
 } from './Dashboard.styles'
 
 interface Stats {
@@ -40,6 +42,46 @@ interface Stats {
     status: string
     tipo: string
   }>
+}
+
+function ResumoCard({
+  titulo,
+  sucesso,
+  erro,
+  destaque,
+  cor = '#ffb86c',
+  icone = ''
+}: {
+  titulo: string
+  sucesso: number
+  erro: number
+  destaque?: boolean
+  cor?: string
+  icone?: string
+}) {
+  // Define o gradient conforme a cor
+  let gradient = ''
+  if (cor === '#ffb86c') {
+    gradient = 'linear-gradient(135deg, #ff9800 0%, #ffb86c 60%, #ff5722 100%)' // laranja intenso para laranja claro
+  } else if (cor === '#4f8cff') {
+    gradient = 'linear-gradient(135deg, #2979ff 0%, #4f8cff 60%, #1e40af 100%)' // azul intenso para azul claro
+  } else if (cor === '#2fd6a7') {
+    gradient = 'linear-gradient(135deg, #00c896 0%, #2fd6a7 60%, #00897b 100%)' // verde intenso para verde claro
+  }
+  return (
+    <Card destaque={destaque} style={{ background: gradient }}>
+      <span style={{ position: 'absolute', top: 18, right: 18, fontSize: 26 }}>
+        {icone}
+      </span>
+      <CardTitle>{titulo}</CardTitle>
+      <CardValue color='#38a169'>
+        Sucesso: <span style={{ fontWeight: 800 }}>{sucesso}</span>
+      </CardValue>
+      <CardValue color='#e53e3e'>
+        Erro: <span style={{ fontWeight: 800 }}>{erro}</span>
+      </CardValue>
+    </Card>
+  )
 }
 
 export default function Dashboard() {
@@ -56,28 +98,63 @@ export default function Dashboard() {
   const handleNext = () => setPage(p => Math.min(totalPages, p + 1))
   return (
     <Container>
-      {/* Sidebar */}
       <Sidebar>
         <SidebarLogo>
-          <span style={{ color: '#f6d365', fontSize: 32, marginRight: 8 }}>
+          <span
+            role='img'
+            aria-label='logo'
+            style={{ color: '#f6e35e', fontSize: 32, marginRight: 8 }}
+          >
             ⚡
           </span>
           <span>
-            <span style={{ color: '#f6d365' }}>Auto</span>
+            <span style={{ color: '#f6e35e' }}>Auto</span>
             <span style={{ color: '#fff' }}>Follow</span>
           </span>
         </SidebarLogo>
         <SidebarNav>
           <SidebarList>
             <SidebarItem active>
-              <span role='img' aria-label='dashboard' style={{ fontSize: 22 }}>
-                📊
+              <span role='img' aria-label='dashboard'>
+                <svg
+                  width='22'
+                  height='22'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <circle cx='12' cy='12' r='10' fill='#6c63ff' />
+                  <path
+                    d='M8 12h8M12 8v8'
+                    stroke='#fff'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                  />
+                </svg>
               </span>
               Dashboard
             </SidebarItem>
             <SidebarItem>
-              <span role='img' aria-label='settings' style={{ fontSize: 22 }}>
-                ⚙️
+              <span role='img' aria-label='settings'>
+                <svg
+                  width='22'
+                  height='22'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <circle cx='12' cy='12' r='10' fill='#232946' />
+                  <path
+                    d='M12 15a3 3 0 100-6 3 3 0 000 6z'
+                    stroke='#bfc8e2'
+                    strokeWidth='2'
+                  />
+                  <path
+                    d='M19.4 15a1.65 1.65 0 01-2.3 2.3l-1.1-1.1a1.65 1.65 0 01-2.3 0l-1.1 1.1a1.65 1.65 0 01-2.3-2.3l1.1-1.1a1.65 1.65 0 010-2.3l-1.1-1.1a1.65 1.65 0 012.3-2.3l1.1 1.1a1.65 1.65 0 012.3 0l1.1-1.1a1.65 1.65 0 012.3 2.3l-1.1 1.1a1.65 1.65 0 010 2.3l1.1 1.1z'
+                    stroke='#bfc8e2'
+                    strokeWidth='1.5'
+                  />
+                </svg>
               </span>
               Configurações
             </SidebarItem>
@@ -87,39 +164,12 @@ export default function Dashboard() {
         <SidebarVersion>v1.0</SidebarVersion>
       </Sidebar>
       {/* Main content */}
-      <Main
-        style={{
-          flex: 1,
-          padding: '32px 32px',
-          display: 'flex'
-        }}
-      >
-        <Title
-          style={{
-            color: '#fff',
-            fontWeight: 800,
-            fontSize: 32,
-            marginBottom: 4,
-            letterSpacing: 0.5
-          }}
-        >
-          Dashboard de Mensagens
-        </Title>
+      <Main>
+        <Title>Dashboard de Mensagens</Title>
         <Subtitle style={{ color: '#bfc8e2', fontSize: 18, marginBottom: 32 }}>
           Resumo dos envios de WhatsApp
         </Subtitle>
-        <CardsWrapper
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 24,
-            alignItems: 'stretch',
-            justifyContent: 'flex-start',
-            marginBottom: 28,
-            width: '100%',
-            flexWrap: 'wrap'
-          }}
-        >
+        <CardsWrapper>
           <ResumoCard
             titulo='Hoje'
             sucesso={stats.dia.sucesso}
@@ -143,26 +193,8 @@ export default function Dashboard() {
             icone='📈'
           />
         </CardsWrapper>
-        <div
-          style={{
-            width: '100%',
-            background: '#232946',
-            borderRadius: 16,
-            boxShadow: '0 2px 16px #23294644',
-            padding: 32,
-            marginBottom: 32,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            maxWidth: 900
-          }}
-        >
-          <SectionTitle
-            style={{ color: '#fff', fontSize: 20, marginBottom: 18 }}
-          >
-            Gráfico de Envios
-          </SectionTitle>
+        <ChartWrapper>
+          <SectionTitle>Gráfico de Envios</SectionTitle>
           {/* Filtros do gráfico */}
           <FilterButtonGroup>
             <FilterButton active>Últimos 12 meses</FilterButton>
@@ -174,7 +206,7 @@ export default function Dashboard() {
             </FilterButton>
           </FilterButtonGroup>
           <Chart />
-        </div>
+        </ChartWrapper>
 
         <SectionTitle style={{ color: '#fff', fontSize: 20, marginBottom: 12 }}>
           Últimos envios
@@ -217,15 +249,7 @@ export default function Dashboard() {
             </tbody>
           </Table>
           {/* Pagination Controls */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 18,
-              gap: 16
-            }}
-          >
+          <PaginationControls>
             <PaginationButton onClick={handlePrev} disabled={page === 1}>
               <span style={{ fontSize: 20, marginRight: 4 }}>←</span> Anterior
             </PaginationButton>
@@ -238,51 +262,9 @@ export default function Dashboard() {
             >
               Próxima <span style={{ fontSize: 20, marginLeft: 4 }}>→</span>
             </PaginationButton>
-          </div>
+          </PaginationControls>
         </TableWrapper>
       </Main>
     </Container>
-  )
-}
-
-function ResumoCard({
-  titulo,
-  sucesso,
-  erro,
-  destaque,
-  cor = '#ffb86c',
-  icone = ''
-}: {
-  titulo: string
-  sucesso: number
-  erro: number
-  destaque?: boolean
-  cor?: string
-  icone?: string
-}) {
-  return (
-    <Card
-      destaque={destaque}
-      cor={
-        cor === '#ffb86c'
-          ? 'hoje'
-          : cor === '#4f8cff'
-          ? 'semana'
-          : cor === '#2fd6a7'
-          ? 'mes'
-          : undefined
-      }
-    >
-      <span style={{ position: 'absolute', top: 18, right: 18, fontSize: 26 }}>
-        {icone}
-      </span>
-      <CardTitle>{titulo}</CardTitle>
-      <CardValue color='#38a169'>
-        Sucesso: <span style={{ fontWeight: 800 }}>{sucesso}</span>
-      </CardValue>
-      <CardValue color='#e53e3e'>
-        Erro: <span style={{ fontWeight: 800 }}>{erro}</span>
-      </CardValue>
-    </Card>
   )
 }
