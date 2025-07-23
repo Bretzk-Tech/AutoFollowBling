@@ -14,7 +14,6 @@ export const ChartWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding-bottom: 40px;
 `
 export const PaginationInfo = styled.span`
   font-weight: 700;
