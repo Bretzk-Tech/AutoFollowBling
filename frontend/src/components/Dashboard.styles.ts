@@ -1,3 +1,34 @@
+export const TdMsg = styled.td<{ status?: string }>`
+  color: ${({ status }) =>
+    status === 'sucesso'
+      ? '#2e7d32'
+      : status === 'erro'
+      ? '#c62828'
+      : '#1a2236'};
+  font-weight: ${({ status }) => (status ? 600 : 500)};
+  letter-spacing: ${({ status }) => (status ? 0.1 : 0.0)}px;
+  padding: 8px 8px;
+  font-size: 14px;
+  border-radius: ${({ status }) => (status ? 4 : 0)}px;
+  background: ${({ status }) =>
+    status === 'sucesso'
+      ? '#e8f5e9'
+      : status === 'erro'
+      ? '#ffebee'
+      : 'transparent'};
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+`
+
+export const TableRowMsg = styled.tr<{ even?: boolean; hoverable?: boolean }>`
+  background: ${({ even }) => (even ? '#fff' : '#f4f6fa')};
+  transition: background 0.2s;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: ${({ hoverable }) => (hoverable ? 'pointer' : 'default')};
+  &:hover {
+    background: ${({ hoverable }) => (hoverable ? '#f6d36511' : undefined)};
+  }
+`
 export const PaginationControls = styled.div`
   display: flex;
   justify-content: center;
@@ -252,6 +283,16 @@ export const Th = styled.th`
   border-bottom: 2.5px solid #f6d365;
   letter-spacing: 0.2px;
   background: none;
+`
+
+export const ThMsg = styled.th`
+  color: #1a2236;
+  font-weight: 600;
+  font-size: 15px;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 8px;
+  letter-spacing: 0.2px;
+  background: #f4f6fa;
 `
 
 export const Td = styled.td`

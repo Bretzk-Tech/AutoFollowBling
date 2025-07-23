@@ -16,8 +16,9 @@ import {
   Table,
   TableHeadRow,
   Th,
-  Td,
-  TableRow,
+  ThMsg,
+  TdMsg,
+  TableRowMsg,
   Card,
   CardTitle,
   CardValue,
@@ -204,187 +205,43 @@ export default function Dashboard() {
         <ChartWrapper style={{ paddingBottom: '40px' }}>
           <TableWrapper>
             <SectionTitle>Últimos envios</SectionTitle>
-            <Table
-              style={{
-                background: '#f8f9fa',
-                borderRadius: 8,
-                boxShadow: '0 1px 6px #23294611',
-                border: '1px solid #e5e7eb',
-                overflow: 'hidden'
-              }}
-            >
+            <Table>
               <thead>
-                <TableHeadRow style={{ background: '#f4f6fa' }}>
-                  <Th
-                    style={{
-                      color: '#1a2236',
-                      fontWeight: 600,
-                      fontSize: 15,
-                      borderBottom: '1px solid #e5e7eb',
-                      padding: '10px 8px',
-                      letterSpacing: 0.2,
-                      background: '#f4f6fa'
-                    }}
-                  >
-                    Data
-                  </Th>
-                  <Th
-                    style={{
-                      color: '#1a2236',
-                      fontWeight: 600,
-                      fontSize: 15,
-                      borderBottom: '1px solid #e5e7eb',
-                      padding: '10px 8px',
-                      letterSpacing: 0.2,
-                      background: '#f4f6fa'
-                    }}
-                  >
-                    Cliente
-                  </Th>
-                  <Th
-                    style={{
-                      color: '#1a2236',
-                      fontWeight: 600,
-                      fontSize: 15,
-                      borderBottom: '1px solid #e5e7eb',
-                      padding: '10px 8px',
-                      letterSpacing: 0.2,
-                      background: '#f4f6fa'
-                    }}
-                  >
-                    Status
-                  </Th>
-                  <Th
-                    style={{
-                      color: '#1a2236',
-                      fontWeight: 600,
-                      fontSize: 15,
-                      borderBottom: '1px solid #e5e7eb',
-                      padding: '10px 8px',
-                      letterSpacing: 0.2,
-                      background: '#f4f6fa'
-                    }}
-                  >
-                    Tipo
-                  </Th>
+                <TableHeadRow>
+                  <ThMsg>Data</ThMsg>
+                  <ThMsg>Cliente</ThMsg>
+                  <ThMsg>Status</ThMsg>
+                  <ThMsg>Tipo</ThMsg>
                 </TableHeadRow>
               </thead>
               <tbody>
                 {paginated.map((msg, i) => (
-                  <TableRow
+                  <TableRowMsg
                     key={i + (page - 1) * itemsPerPage}
                     hoverable
                     even={(i + (page - 1) * itemsPerPage) % 2 === 0}
-                    style={{
-                      background:
-                        (i + (page - 1) * itemsPerPage) % 2 === 0
-                          ? '#fff'
-                          : '#f4f6fa',
-                      transition: 'background 0.2s',
-                      borderBottom: '1px solid #e5e7eb'
-                    }}
                   >
-                    <Td
-                      style={{
-                        color: '#1a2236',
-                        fontWeight: 500,
-                        padding: '8px 8px',
-                        fontSize: 14
-                      }}
-                    >
-                      {msg.data}
-                    </Td>
-                    <Td
-                      style={{
-                        color: '#1a2236',
-                        fontWeight: 500,
-                        padding: '8px 8px',
-                        fontSize: 14
-                      }}
-                    >
-                      {msg.cliente}
-                    </Td>
-                    <Td
-                      style={{
-                        color: msg.status === 'sucesso' ? '#2e7d32' : '#c62828',
-                        fontWeight: 600,
-                        letterSpacing: 0.1,
-                        padding: '8px 8px',
-                        fontSize: 14,
-                        borderRadius: 4,
-                        background:
-                          msg.status === 'sucesso' ? '#e8f5e9' : '#ffebee',
-                        boxShadow: 'none',
-                        border: '1px solid #e5e7eb'
-                      }}
-                    >
+                    <TdMsg>{msg.data}</TdMsg>
+                    <TdMsg>{msg.cliente}</TdMsg>
+                    <TdMsg status={msg.status}>
                       {msg.status === 'sucesso' ? 'Sucesso' : 'Erro'}
-                    </Td>
-                    <Td
-                      style={{
-                        color: '#1a2236',
-                        fontWeight: 500,
-                        padding: '8px 8px',
-                        fontSize: 14
-                      }}
-                    >
-                      {msg.tipo}
-                    </Td>
-                  </TableRow>
+                    </TdMsg>
+                    <TdMsg>{msg.tipo}</TdMsg>
+                  </TableRowMsg>
                 ))}
               </tbody>
             </Table>
             {/* Pagination Controls */}
-            <PaginationControls
-              style={{ marginTop: 18, justifyContent: 'center', gap: 12 }}
-            >
-              <PaginationButton
-                onClick={handlePrev}
-                disabled={page === 1}
-                style={{
-                  background: page === 1 ? '#e5e7eb' : '#1a2236',
-                  color: page === 1 ? '#bfc8e2' : '#fff',
-                  fontWeight: 500,
-                  fontSize: 15,
-                  borderRadius: 6,
-                  border: '1px solid #e5e7eb',
-                  padding: '7px 16px',
-                  boxShadow: 'none',
-                  cursor: page === 1 ? 'not-allowed' : 'pointer',
-                  transition: 'background 0.2s, color 0.2s'
-                }}
-              >
+            <PaginationControls>
+              <PaginationButton onClick={handlePrev} disabled={page === 1}>
                 <span style={{ fontSize: 18, marginRight: 4 }}>←</span> Anterior
               </PaginationButton>
-              <PaginationInfo
-                style={{
-                  color: '#1a2236',
-                  fontWeight: 500,
-                  fontSize: 15,
-                  letterSpacing: 0.2,
-                  padding: '7px 16px',
-                  background: '#f4f6fa',
-                  borderRadius: 6,
-                  border: '1px solid #e5e7eb'
-                }}
-              >
+              <PaginationInfo>
                 Página {page} de {totalPages}
               </PaginationInfo>
               <PaginationButton
                 onClick={handleNext}
                 disabled={page === totalPages}
-                style={{
-                  background: page === totalPages ? '#e5e7eb' : '#1a2236',
-                  color: page === totalPages ? '#bfc8e2' : '#fff',
-                  fontWeight: 500,
-                  fontSize: 15,
-                  borderRadius: 6,
-                  border: '1px solid #e5e7eb',
-                  padding: '7px 16px',
-                  boxShadow: 'none',
-                  cursor: page === totalPages ? 'not-allowed' : 'pointer',
-                  transition: 'background 0.2s, color 0.2s'
-                }}
               >
                 Próxima <span style={{ fontSize: 18, marginLeft: 4 }}>→</span>
               </PaginationButton>
