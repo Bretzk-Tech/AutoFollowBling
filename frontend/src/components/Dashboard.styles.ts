@@ -3,21 +3,20 @@ import styled from 'styled-components'
 export const Container = styled.div`
   display: flex;
   min-height: 100vh;
-  background: #f7fafc;
+  background: linear-gradient(120deg, #232946 0%, #232946 60%, #1a1a2e 100%);
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   letter-spacing: 0.1px;
-  padding: 20px;
-  padding-left: 290px; 
+  padding: 0;
 `
 
 export const Sidebar = styled.aside`
-  width: 270px;
-  background: #232946;
+  width: 240px;
+  background: linear-gradient(120deg, #232946 80%, #1a1a2e 100%);
   color: #fff;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 28px 0 18px 0;
+  align-items: flex-start;
+  padding: 32px 0 18px 0;
   min-height: 100vh;
   position: fixed;
   top: 0;
@@ -25,47 +24,52 @@ export const Sidebar = styled.aside`
   z-index: 20;
   border-top-right-radius: 18px;
   border-bottom-right-radius: 18px;
-  box-shadow: none;
+  box-shadow: 0 4px 24px #00000022;
+  gap: 16px;
 `
 
 export const SidebarLogo = styled.div`
-  font-weight: 700;
-  font-size: 22px;
-  margin-bottom: 24px;
-  letter-spacing: -1px;
+  font-weight: 800;
+  font-size: 24px;
+  margin-bottom: 32px;
+  letter-spacing: -1.5px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  color: #f6e35e;
 `
 
 export const SidebarNav = styled.nav`
   width: 100%;
+  padding-left: 24px;
 `
 
 export const SidebarList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 `
 
 interface SidebarItemProps {
   active?: boolean
 }
 export const SidebarItem = styled.li<SidebarItemProps>`
-  padding: 10px 18px;
-  font-size: 16px;
+  padding: 12px 24px;
+  font-size: 17px;
   color: ${({ active }) => (active ? '#f6e35e' : '#e0e0e0')};
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
-  border-left: 3px solid ${({ active }) => (active ? '#f6e35e' : 'transparent')};
+  border-left: 4px solid ${({ active }) => (active ? '#f6e35e' : 'transparent')};
   display: flex;
   align-items: center;
-  font-weight: 500;
-  margin-bottom: 6px;
-  border-radius: 6px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  border-radius: 8px;
   user-select: none;
   letter-spacing: 0.1px;
-  background: ${({ active }) => (active ? 'rgba(246, 227, 94, 0.08)' : 'none')};
+  background: ${({ active }) => (active ? 'rgba(246, 227, 94, 0.12)' : 'none')};
+  box-shadow: ${({ active }) => (active ? '0 2px 8px #f6e35e22' : 'none')};
 `
 
 export const SidebarVersion = styled.div`
@@ -73,54 +77,55 @@ export const SidebarVersion = styled.div`
   color: #cbd5e1;
   margin-bottom: 8px;
   letter-spacing: 0.5px;
+  padding-left: 24px;
 `
 
 export const Main = styled.main`
   flex: 1;
-  padding: 36px 4vw;
-  width: calc(100% - 270px);
-  max-width: 1100px;
-  margin: 0 auto;
-  margin-left: 270px;
-  border: 1px solid #444444;
-  border-radius: 10px;
-  margin: 0 auto;
+  padding: 40px 4vw 0 4vw;
+  width: calc(100% - 240px);
+  max-width: 1200px;
+  margin-left: 240px;
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background: none;
-  box-shadow: none;
+  background: linear-gradient(120deg, #232946 80%, #1a1a2e 100%);
+  box-shadow: 0 4px 24px #00000022;
+  min-height: 100vh;
 `
 
 export const Title = styled.h1`
-  font-weight: 800;
-  font-size: 40px;
-  margin-bottom: 10px;
-  color: #232946;
-  letter-spacing: -1.5px;
-  text-shadow: 0 2px 8px #f6d36522;
+  font-weight: 900;
+  font-size: 42px;
+  margin-bottom: 0px;
+  color: #fff;
+  letter-spacing: -2px;
+  text-shadow: 0 2px 12px #23294688;
 `
 
 export const Subtitle = styled.p`
-  color: #6b7280;
-  margin-bottom: 36px;
-  font-size: 18px;
+  color: #cbd5e1;
+  margin-bottom: 18px;
+  font-size: 19px;
   font-weight: 500;
+  letter-spacing: -0.5px;
 `
 
 export const SectionTitle = styled.h2`
-  font-size: 26px;
-  color: #232946;
-  margin-bottom: 20px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 22px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 8px #23294644;
 `
 
 // Removido CardsWrapper duplicado
 export const CardsWrapper = styled.div`
   display: flex;
-  gap: 14px;
-  margin-bottom: 24px;
+  gap: 22px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
   justify-content: center;
 `
@@ -172,27 +177,32 @@ export const TableRow = styled.tr<TableRowProps>`
 
 interface CardProps {
   destaque?: boolean
+  cor?: 'hoje' | 'semana' | 'mes'
 }
 export const Card = styled.div<CardProps>`
   flex: 1;
-  min-width: 100px;
+  min-width: 180px;
+  max-width: 320px;
   width: auto;
-  background: ${({ destaque }) =>
-    destaque
-      ? 'linear-gradient(90deg, #f6d365 0%, #fda085 100%)'
+  background: ${({ cor }) =>
+    cor === 'hoje'
+      ? 'linear-gradient(90deg, #f7971e 0%, #ffd200 100%)'
+      : cor === 'semana'
+      ? 'linear-gradient(90deg, #56ccf2 0%, #2f80ed 100%)'
+      : cor === 'mes'
+      ? 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)'
       : 'linear-gradient(90deg, #f7fafc 0%, #e2e8f0 100%)'};
-  border-radius: 10px;
-  padding: 12px 8px;
-  box-shadow: none;
+  border-radius: 16px;
+  padding: 18px 24px 16px 24px;
+  box-shadow: 0 2px 16px #23294622;
   color: #232946;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  border: ${({ destaque }) =>
-    destaque ? '2px solid #f6d365' : '1px solid #e2e8f0'};
-  font-weight: ${({ destaque }) => (destaque ? 700 : 500)};
-  font-size: 13px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
   margin-bottom: 6px;
   transition: box-shadow 0.2s, transform 0.2s;
   position: relative;
@@ -200,20 +210,23 @@ export const Card = styled.div<CardProps>`
 `
 
 export const CardTitle = styled.h3`
-  font-size: 24px;
-  margin-bottom: 10px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+  color: #232946;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `
 
 interface CardValueProps {
   color?: string
 }
 export const CardValue = styled.div<CardValueProps>`
-  font-size: 32px;
+  font-size: 26px;
   color: ${({ color }) => color || '#232946'};
-  font-weight: 800;
-  margin-bottom: 6px;
+  font-weight: 900;
   letter-spacing: 0.2px;
   text-shadow: ${({ color }) =>
     color === '#38a169'
@@ -223,11 +236,12 @@ export const CardValue = styled.div<CardValueProps>`
       : 'none'};
   display: flex;
   align-items: center;
+  gap: 6px;
 `
 
 export const CardLabel = styled.span`
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: #23294699;
-  margin-right: 6px;
+  margin-right: 8px;
 `
