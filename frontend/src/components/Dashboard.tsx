@@ -22,7 +22,12 @@ import {
   CardTitle,
   CardValue,
   CardLabel,
-  CardsWrapper
+  CardsWrapper,
+  FilterButtonGroup,
+  FilterButton,
+  TableWrapper,
+  PaginationButton,
+  PaginationInfo
 } from './Dashboard.styles'
 
 interface Stats {
@@ -54,7 +59,9 @@ export default function Dashboard() {
       {/* Sidebar */}
       <Sidebar>
         <SidebarLogo>
-          <span style={{ color: '#f6d365', fontSize: 36 }}>⚡</span>
+          <span style={{ color: '#f6d365', fontSize: 32, marginRight: 8 }}>
+            ⚡
+          </span>
           <span>
             <span style={{ color: '#f6d365' }}>Auto</span>
             <span style={{ color: '#fff' }}>Follow</span>
@@ -63,21 +70,13 @@ export default function Dashboard() {
         <SidebarNav>
           <SidebarList>
             <SidebarItem active>
-              <span
-                role='img'
-                aria-label='dashboard'
-                style={{ marginRight: 12, fontSize: 22 }}
-              >
+              <span role='img' aria-label='dashboard' style={{ fontSize: 22 }}>
                 📊
               </span>
               Dashboard
             </SidebarItem>
             <SidebarItem>
-              <span
-                role='img'
-                aria-label='settings'
-                style={{ marginRight: 12, fontSize: 22 }}
-              >
+              <span role='img' aria-label='settings' style={{ fontSize: 22 }}>
                 ⚙️
               </span>
               Configurações
@@ -88,72 +87,99 @@ export default function Dashboard() {
         <SidebarVersion>v1.0</SidebarVersion>
       </Sidebar>
       {/* Main content */}
-      <Main>
-        <Title>Dashboard de Mensagens</Title>
-        <Subtitle>Resumo dos envios de WhatsApp</Subtitle>
+      <Main
+        style={{
+          flex: 1,
+          padding: '32px 32px',
+          display: 'flex'
+        }}
+      >
+        <Title
+          style={{
+            color: '#fff',
+            fontWeight: 800,
+            fontSize: 32,
+            marginBottom: 4,
+            letterSpacing: 0.5
+          }}
+        >
+          Dashboard de Mensagens
+        </Title>
+        <Subtitle style={{ color: '#bfc8e2', fontSize: 18, marginBottom: 32 }}>
+          Resumo dos envios de WhatsApp
+        </Subtitle>
         <CardsWrapper
           style={{
             display: 'flex',
-            flexWrap: 'wrap',
+            flexDirection: 'row',
             gap: 24,
             alignItems: 'stretch',
-            justifyContent: 'center',
-            marginBottom: 24
+            justifyContent: 'flex-start',
+            marginBottom: 28,
+            width: '100%',
+            flexWrap: 'wrap'
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-              minWidth: 220,
-              flex: '1 1 220px',
-              maxWidth: 320
-            }}
-          >
-            <ResumoCard
-              titulo='Hoje'
-              sucesso={stats.dia.sucesso}
-              erro={stats.dia.erro}
-              destaque
-            />
-            <ResumoCard
-              titulo='Semana'
-              sucesso={stats.semana.sucesso}
-              erro={stats.semana.erro}
-            />
-            <ResumoCard
-              titulo='Mês'
-              sucesso={stats.mes.sucesso}
-              erro={stats.mes.erro}
-            />
-          </div>
-          <div
-            style={{
-              flex: '2 1 400px',
-              minWidth: 320,
-              maxWidth: 600,
-              width: '100%',
-              background: '#fff',
-              borderRadius: 12,
-              boxShadow: '0 2px 8px #f6d36522',
-              padding: 24,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <SectionTitle style={{ textAlign: 'center', marginBottom: 8 }}>
-              Gráfico de Envios
-            </SectionTitle>
-            <Chart />
-          </div>
+          <ResumoCard
+            titulo='Hoje'
+            sucesso={stats.dia.sucesso}
+            erro={stats.dia.erro}
+            destaque
+            cor='#ffb86c'
+            icone='🔥'
+          />
+          <ResumoCard
+            titulo='Semana'
+            sucesso={stats.semana.sucesso}
+            erro={stats.semana.erro}
+            cor='#4f8cff'
+            icone='📅'
+          />
+          <ResumoCard
+            titulo='Mês'
+            sucesso={stats.mes.sucesso}
+            erro={stats.mes.erro}
+            cor='#2fd6a7'
+            icone='📈'
+          />
         </CardsWrapper>
-        {/* Gráfico de vendas */}
+        <div
+          style={{
+            width: '100%',
+            background: '#232946',
+            borderRadius: 16,
+            boxShadow: '0 2px 16px #23294644',
+            padding: 32,
+            marginBottom: 32,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            maxWidth: 900
+          }}
+        >
+          <SectionTitle
+            style={{ color: '#fff', fontSize: 20, marginBottom: 18 }}
+          >
+            Gráfico de Envios
+          </SectionTitle>
+          {/* Filtros do gráfico */}
+          <FilterButtonGroup>
+            <FilterButton active>Últimos 12 meses</FilterButton>
+            <FilterButton style={{ border: '1px solid #4f8cff44' }}>
+              Últimos 30 dias
+            </FilterButton>
+            <FilterButton style={{ border: '1px solid #2fd6a744' }}>
+              Semana atual
+            </FilterButton>
+          </FilterButtonGroup>
+          <Chart />
+        </div>
 
-        <SectionTitle>Últimos envios</SectionTitle>
-        <CardsWrapper>
+        <SectionTitle style={{ color: '#fff', fontSize: 20, marginBottom: 12 }}>
+          Últimos envios
+        </SectionTitle>
+        <TableWrapper>
           <Table>
             <thead>
               <TableHeadRow>
@@ -200,93 +226,20 @@ export default function Dashboard() {
               gap: 16
             }}
           >
-            <button
-              onClick={handlePrev}
-              disabled={page === 1}
-              style={{
-                padding: '8px 18px',
-                borderRadius: 8,
-                border: 'none',
-                background:
-                  page === 1
-                    ? '#e2e8f0'
-                    : 'linear-gradient(90deg, #f6d365 0%, #fda085 100%)',
-                color: page === 1 ? '#a0aec0' : '#232946',
-                fontWeight: 700,
-                cursor: page === 1 ? 'not-allowed' : 'pointer',
-                opacity: page === 1 ? 0.6 : 1,
-                fontSize: 18,
-                boxShadow: page === 1 ? 'none' : '0 2px 8px #f6d36522',
-                transition: 'all 0.2s',
-                outline: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8
-              }}
-              onMouseOver={e => {
-                if (page !== 1)
-                  e.currentTarget.style.background =
-                    'linear-gradient(90deg, #fda085 0%, #f6d365 100%)'
-              }}
-              onMouseOut={e => {
-                if (page !== 1)
-                  e.currentTarget.style.background =
-                    'linear-gradient(90deg, #f6d365 0%, #fda085 100%)'
-              }}
-            >
+            <PaginationButton onClick={handlePrev} disabled={page === 1}>
               <span style={{ fontSize: 20, marginRight: 4 }}>←</span> Anterior
-            </button>
-            <span
-              style={{
-                fontWeight: 700,
-                fontSize: 17,
-                color: '#232946',
-                background: '#f6d36522',
-                borderRadius: 6,
-                padding: '6px 18px',
-                boxShadow: '0 2px 8px #f6d36511'
-              }}
-            >
+            </PaginationButton>
+            <PaginationInfo>
               Página {page} de {totalPages}
-            </span>
-            <button
+            </PaginationInfo>
+            <PaginationButton
               onClick={handleNext}
               disabled={page === totalPages}
-              style={{
-                padding: '8px 18px',
-                borderRadius: 8,
-                border: 'none',
-                background:
-                  page === totalPages
-                    ? '#e2e8f0'
-                    : 'linear-gradient(90deg, #f6d365 0%, #fda085 100%)',
-                color: page === totalPages ? '#a0aec0' : '#232946',
-                fontWeight: 700,
-                cursor: page === totalPages ? 'not-allowed' : 'pointer',
-                opacity: page === totalPages ? 0.6 : 1,
-                fontSize: 18,
-                boxShadow: page === totalPages ? 'none' : '0 2px 8px #f6d36522',
-                transition: 'all 0.2s',
-                outline: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8
-              }}
-              onMouseOver={e => {
-                if (page !== totalPages)
-                  e.currentTarget.style.background =
-                    'linear-gradient(90deg, #fda085 0%, #f6d365 100%)'
-              }}
-              onMouseOut={e => {
-                if (page !== totalPages)
-                  e.currentTarget.style.background =
-                    'linear-gradient(90deg, #f6d365 0%, #fda085 100%)'
-              }}
             >
               Próxima <span style={{ fontSize: 20, marginLeft: 4 }}>→</span>
-            </button>
+            </PaginationButton>
           </div>
-        </CardsWrapper>
+        </TableWrapper>
       </Main>
     </Container>
   )
@@ -296,35 +249,39 @@ function ResumoCard({
   titulo,
   sucesso,
   erro,
-  destaque
+  destaque,
+  cor = '#ffb86c',
+  icone = ''
 }: {
   titulo: string
   sucesso: number
   erro: number
   destaque?: boolean
+  cor?: string
+  icone?: string
 }) {
   return (
-    <Card destaque={destaque}>
-      {destaque && (
-        <span
-          style={{
-            position: 'absolute',
-            top: 18,
-            right: 18,
-            fontSize: 22,
-            color: '#fda085',
-            opacity: 0.7
-          }}
-        >
-          🔥
-        </span>
-      )}
+    <Card
+      destaque={destaque}
+      cor={
+        cor === '#ffb86c'
+          ? 'hoje'
+          : cor === '#4f8cff'
+          ? 'semana'
+          : cor === '#2fd6a7'
+          ? 'mes'
+          : undefined
+      }
+    >
+      <span style={{ position: 'absolute', top: 18, right: 18, fontSize: 26 }}>
+        {icone}
+      </span>
       <CardTitle>{titulo}</CardTitle>
       <CardValue color='#38a169'>
-        <CardLabel>Sucesso</CardLabel> {sucesso}
+        Sucesso: <span style={{ fontWeight: 800 }}>{sucesso}</span>
       </CardValue>
       <CardValue color='#e53e3e'>
-        <CardLabel>Erro</CardLabel> {erro}
+        Erro: <span style={{ fontWeight: 800 }}>{erro}</span>
       </CardValue>
     </Card>
   )

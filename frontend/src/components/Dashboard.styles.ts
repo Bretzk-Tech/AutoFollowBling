@@ -1,3 +1,69 @@
+export const PaginationInfo = styled.span`
+  font-weight: 700;
+  font-size: 17px;
+  color: #232946;
+  background: #f6d36522;
+  border-radius: 6px;
+  padding: 6px 18px;
+  box-shadow: 0 2px 8px #f6d36511;
+`
+interface PaginationButtonProps {
+  disabled?: boolean
+}
+export const PaginationButton = styled.button<PaginationButtonProps>`
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: ${({ disabled }) =>
+    disabled ? '#e2e8f0' : 'linear-gradient(90deg, #f6d365 0%, #fda085 100%)'};
+  color: ${({ disabled }) => (disabled ? '#a0aec0' : '#232946')};
+  font-weight: 700;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  font-size: 18px;
+  box-shadow: ${({ disabled }) => (disabled ? 'none' : '0 2px 8px #f6d36522')};
+  transition: all 0.2s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  &:hover {
+    background: ${({ disabled }) =>
+      disabled
+        ? '#e2e8f0'
+        : 'linear-gradient(90deg, #fda085 0%, #f6d365 100%)'};
+  }
+`
+export const TableWrapper = styled.div`
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-x: auto;
+  background: #232946;
+  border-radius: 16px;
+  padding: 24px;
+`
+// Botões de filtro do gráfico
+export const FilterButtonGroup = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+`
+
+export const FilterButton = styled.button<{ active?: boolean }>`
+  padding: 4px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  background: ${({ active }) => (active ? '#4f8cff' : '#232946')};
+  color: ${({ active }) => (active ? '#fff' : '#bfc8e2')};
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  box-shadow: ${({ active }) => (active ? '0 2px 8px #4f8cff44' : 'none')};
+`
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -83,7 +149,7 @@ export const SidebarVersion = styled.div`
 export const Main = styled.main`
   flex: 1;
   padding: 40px 4vw 0 4vw;
-  width: calc(100% - 240px);
+  /* width: calc(100% - 240px); */
   max-width: 1200px;
   margin-left: 240px;
   border-radius: 18px;
