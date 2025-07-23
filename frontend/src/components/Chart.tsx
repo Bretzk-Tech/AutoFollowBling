@@ -75,100 +75,171 @@ function filterData(type: string): { name: string; envios: number }[] {
 }
 
 import React from 'react'
+import { SectionTitle } from './Dashboard.styles'
 
 export default function Chart() {
   const [filtro, setFiltro] = React.useState('12meses')
   const data = filterData(filtro)
   return (
-    <div>
-      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-        <button
-          onClick={() => setFiltro('12meses')}
-          style={{
-            padding: '6px 16px',
-            borderRadius: 6,
-            border: 'none',
-            background: filtro === '12meses' ? '#38a169' : '#e2e8f0',
-            color: filtro === '12meses' ? '#fff' : '#232946',
-            fontWeight: 600,
-            cursor: 'pointer'
-          }}
-        >
-          Últimos 12 meses
-        </button>
-        <button
-          onClick={() => setFiltro('30dias')}
-          style={{
-            padding: '6px 16px',
-            borderRadius: 6,
-            border: 'none',
-            background: filtro === '30dias' ? '#38a169' : '#e2e8f0',
-            color: filtro === '30dias' ? '#fff' : '#232946',
-            fontWeight: 600,
-            cursor: 'pointer'
-          }}
-        >
-          Últimos 30 dias
-        </button>
-        <button
-          onClick={() => setFiltro('mes')}
-          style={{
-            padding: '6px 16px',
-            borderRadius: 6,
-            border: 'none',
-            background: filtro === 'mes' ? '#38a169' : '#e2e8f0',
-            color: filtro === 'mes' ? '#fff' : '#232946',
-            fontWeight: 600,
-            cursor: 'pointer'
-          }}
-        >
-          Mês atual
-        </button>
-        <button
-          onClick={() => setFiltro('semana')}
-          style={{
-            padding: '6px 16px',
-            borderRadius: 6,
-            border: 'none',
-            background: filtro === 'semana' ? '#38a169' : '#e2e8f0',
-            color: filtro === 'semana' ? '#fff' : '#232946',
-            fontWeight: 600,
-            cursor: 'pointer'
-          }}
-        >
-          Semana atual
-        </button>
-        <button
-          onClick={() => setFiltro('hoje')}
-          style={{
-            padding: '6px 16px',
-            borderRadius: 6,
-            border: 'none',
-            background: filtro === 'hoje' ? '#38a169' : '#e2e8f0',
-            color: filtro === 'hoje' ? '#fff' : '#232946',
-            fontWeight: 600,
-            cursor: 'pointer'
-          }}
-        >
-          Hoje
-        </button>
+    <div
+      style={{
+        background: 'rgba(30,32,44,0.95)',
+        borderRadius: 16,
+        boxShadow: '0 2px 16px #23294633',
+        padding: '10px 24px',
+        margin: '0 auto',
+        marginTop: 8,
+        marginBottom: 24,
+        border: '1px solid #232946',
+        maxWidth: 1000,
+        width: '100%'
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          gap: 12,
+          marginBottom: 16
+        }}
+      >
+        <SectionTitle>Gráfico de Envios</SectionTitle>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={() => setFiltro('12meses')}
+            style={{
+              padding: '6px 16px',
+              maxHeight: '30px',
+              borderRadius: 8,
+              border: 'none',
+              background: filtro === '12meses' ? '#6c63ff' : '#232946',
+              color: filtro === '12meses' ? '#fff' : '#bfc8e2',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow:
+                filtro === '12meses' ? '0 2px 8px #6c63ff33' : undefined,
+              transition: 'all 0.2s'
+            }}
+          >
+            Últimos 12 meses
+          </button>
+          <button
+            onClick={() => setFiltro('30dias')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: 8,
+              maxHeight: '30px',
+              border: 'none',
+              background: filtro === '30dias' ? '#4f8cff' : '#232946',
+              color: filtro === '30dias' ? '#fff' : '#bfc8e2',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow:
+                filtro === '30dias' ? '0 2px 8px #4f8cff33' : undefined,
+              transition: 'all 0.2s'
+            }}
+          >
+            Últimos 30 dias
+          </button>
+          <button
+            onClick={() => setFiltro('mes')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: 8,
+              border: 'none',
+              maxHeight: '30px',
+              background: filtro === 'mes' ? '#2fd6a7' : '#232946',
+              color: filtro === 'mes' ? '#fff' : '#bfc8e2',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: filtro === 'mes' ? '0 2px 8px #2fd6a733' : undefined,
+              transition: 'all 0.2s'
+            }}
+          >
+            Mês atual
+          </button>
+          <button
+            onClick={() => setFiltro('semana')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: 8,
+              border: 'none',
+              maxHeight: '30px',
+              background: filtro === 'semana' ? '#ffb86c' : '#232946',
+              color: filtro === 'semana' ? '#232946' : '#bfc8e2',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow:
+                filtro === 'semana' ? '0 2px 8px #ffb86c33' : undefined,
+              transition: 'all 0.2s'
+            }}
+          >
+            Semana atual
+          </button>
+          <button
+            onClick={() => setFiltro('hoje')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: 8,
+              maxHeight: '30px',
+              border: 'none',
+              background: filtro === 'hoje' ? '#ff2e63' : '#232946',
+              color: filtro === 'hoje' ? '#fff' : '#bfc8e2',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: filtro === 'hoje' ? '0 2px 8px #ff2e6333' : undefined,
+              transition: 'all 0.2s'
+            }}
+          >
+            Hoje
+          </button>
+        </div>
       </div>
       <ResponsiveContainer width='100%' height={300}>
         <LineChart
           data={data}
-          margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+          margin={{ top: 32, right: 32, left: 0, bottom: 0 }}
         >
-          <CartesianGrid strokeDasharray='3 3' />
-          <XAxis dataKey='name' />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+          <CartesianGrid strokeDasharray='6 6' stroke='#23294655' />
+          <XAxis
+            dataKey='name'
+            tick={{ fill: '#bfc8e2', fontSize: 14 }}
+            axisLine={{ stroke: '#232946' }}
+            tickLine={false}
+          />
+          <YAxis
+            tick={{ fill: '#bfc8e2', fontSize: 14 }}
+            axisLine={{ stroke: '#232946' }}
+            tickLine={false}
+          />
+          <Tooltip
+            contentStyle={{
+              background: '#232946',
+              borderRadius: 12,
+              color: '#fff',
+              border: 'none',
+              boxShadow: '0 2px 8px #23294633',
+              fontSize: 16
+            }}
+            labelStyle={{ color: '#fff', fontWeight: 700, fontSize: 15 }}
+            itemStyle={{ color: '#38a169', fontWeight: 700, fontSize: 15 }}
+            cursor={{ stroke: '#6c63ff', strokeWidth: 2 }}
+          />
+          <Legend wrapperStyle={{ color: '#bfc8e2', fontSize: 15 }} />
           <Line
             type='monotone'
             dataKey='envios'
-            name='Envio de Mensagens'
-            stroke='#38a169'
-            activeDot={{ r: 8 }}
+            name='Envios'
+            stroke='#4f8cff'
+            strokeWidth={3}
+            dot={{ r: 5, stroke: '#fff', strokeWidth: 2, fill: '#4f8cff' }}
+            activeDot={{
+              r: 8,
+              fill: '#ff2e63',
+              stroke: '#fff',
+              strokeWidth: 2
+            }}
           />
         </LineChart>
       </ResponsiveContainer>

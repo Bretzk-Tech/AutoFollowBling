@@ -10,13 +10,13 @@ export const ChartWrapper = styled.div`
   background: #232946;
   border-radius: 16px;
   box-shadow: 0 2px 16px #23294644;
-  padding: 32px;
-  margin-bottom: 32px;
   display: flex;
+  margin: 0 auto;
+  margin-bottom: 24px;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  max-width: 900px;
+  /* border: 1px solid red; */
 `
 export const PaginationInfo = styled.span`
   font-weight: 700;
@@ -222,9 +222,12 @@ export const SectionTitle = styled.h2`
 export const CardsWrapper = styled.div`
   display: flex;
   gap: 22px;
+  margin: 0 auto;
   margin-bottom: 32px;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  max-width: 1100px;
 `
 
 export const Table = styled.table`
@@ -307,11 +310,12 @@ export const Card = styled.div<CardProps>`
 `
 
 export const CardTitle = styled.h3`
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 800;
+  margin: 0;
   margin-bottom: 8px;
   letter-spacing: -1px;
-  color: #232946;
+  color: white;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -321,9 +325,9 @@ interface CardValueProps {
   color?: string
 }
 export const CardValue = styled.div<CardValueProps>`
-  font-size: 26px;
-  color: ${({ color }) => color || '#232946'};
-  font-weight: 900;
+  font-size: 18px;
+  color: white;
+  font-weight: 600;
   letter-spacing: 0.2px;
   text-shadow: ${({ color }) =>
     color === '#38a169'

@@ -70,14 +70,18 @@ function ResumoCard({
   }
   return (
     <Card destaque={destaque} style={{ background: gradient }}>
-      <span style={{ position: 'absolute', top: 18, right: 18, fontSize: 26 }}>
-        {icone}
-      </span>
-      <CardTitle>{titulo}</CardTitle>
-      <CardValue color='#38a169'>
+      <CardTitle>
+        <span
+        // style={{ position: 'absolute', top: 18, right: 18, fontSize: 26 }}
+        >
+          {icone}
+        </span>
+        {titulo}
+      </CardTitle>
+      <CardValue>
         Sucesso: <span style={{ fontWeight: 800 }}>{sucesso}</span>
       </CardValue>
-      <CardValue color='#e53e3e'>
+      <CardValue>
         Erro: <span style={{ fontWeight: 800 }}>{erro}</span>
       </CardValue>
     </Card>
@@ -194,76 +198,69 @@ export default function Dashboard() {
           />
         </CardsWrapper>
         <ChartWrapper>
-          <SectionTitle>Gráfico de Envios</SectionTitle>
-          {/* Filtros do gráfico */}
-          <FilterButtonGroup>
-            <FilterButton active>Últimos 12 meses</FilterButton>
-            <FilterButton style={{ border: '1px solid #4f8cff44' }}>
-              Últimos 30 dias
-            </FilterButton>
-            <FilterButton style={{ border: '1px solid #2fd6a744' }}>
-              Semana atual
-            </FilterButton>
-          </FilterButtonGroup>
           <Chart />
         </ChartWrapper>
 
-        <SectionTitle style={{ color: '#fff', fontSize: 20, marginBottom: 12 }}>
-          Últimos envios
-        </SectionTitle>
-        <TableWrapper>
-          <Table>
-            <thead>
-              <TableHeadRow>
-                <Th>Data</Th>
-                <Th>Cliente</Th>
-                <Th>Status</Th>
-                <Th>Tipo</Th>
-              </TableHeadRow>
-            </thead>
-            <tbody>
-              {paginated.map((msg, i) => (
-                <TableRow
-                  key={i + (page - 1) * itemsPerPage}
-                  hoverable
-                  even={(i + (page - 1) * itemsPerPage) % 2 === 0}
-                >
-                  <Td>{msg.data}</Td>
-                  <Td>{msg.cliente}</Td>
-                  <Td
-                    style={{
-                      color: msg.status === 'sucesso' ? '#38a169' : '#e53e3e',
-                      fontWeight: 700,
-                      letterSpacing: 0.2,
-                      textShadow:
-                        msg.status === 'sucesso'
-                          ? '0 1px 4px #38a16922'
-                          : '0 1px 4px #e53e3e22'
-                    }}
+        <ChartWrapper>
+          <SectionTitle
+            style={{ color: '#fff', fontSize: 20, marginBottom: 12 }}
+          >
+            Últimos envios
+          </SectionTitle>
+          <TableWrapper>
+            <Table>
+              <thead>
+                <TableHeadRow>
+                  <Th>Data</Th>
+                  <Th>Cliente</Th>
+                  <Th>Status</Th>
+                  <Th>Tipo</Th>
+                </TableHeadRow>
+              </thead>
+              <tbody>
+                {paginated.map((msg, i) => (
+                  <TableRow
+                    key={i + (page - 1) * itemsPerPage}
+                    hoverable
+                    even={(i + (page - 1) * itemsPerPage) % 2 === 0}
                   >
-                    {msg.status === 'sucesso' ? 'Sucesso' : 'Erro'}
-                  </Td>
-                  <Td>{msg.tipo}</Td>
-                </TableRow>
-              ))}
-            </tbody>
-          </Table>
-          {/* Pagination Controls */}
-          <PaginationControls>
-            <PaginationButton onClick={handlePrev} disabled={page === 1}>
-              <span style={{ fontSize: 20, marginRight: 4 }}>←</span> Anterior
-            </PaginationButton>
-            <PaginationInfo>
-              Página {page} de {totalPages}
-            </PaginationInfo>
-            <PaginationButton
-              onClick={handleNext}
-              disabled={page === totalPages}
-            >
-              Próxima <span style={{ fontSize: 20, marginLeft: 4 }}>→</span>
-            </PaginationButton>
-          </PaginationControls>
-        </TableWrapper>
+                    <Td>{msg.data}</Td>
+                    <Td>{msg.cliente}</Td>
+                    <Td
+                      style={{
+                        color: msg.status === 'sucesso' ? '#38a169' : '#e53e3e',
+                        fontWeight: 700,
+                        letterSpacing: 0.2,
+                        textShadow:
+                          msg.status === 'sucesso'
+                            ? '0 1px 4px #38a16922'
+                            : '0 1px 4px #e53e3e22'
+                      }}
+                    >
+                      {msg.status === 'sucesso' ? 'Sucesso' : 'Erro'}
+                    </Td>
+                    <Td>{msg.tipo}</Td>
+                  </TableRow>
+                ))}
+              </tbody>
+            </Table>
+            {/* Pagination Controls */}
+            <PaginationControls>
+              <PaginationButton onClick={handlePrev} disabled={page === 1}>
+                <span style={{ fontSize: 20, marginRight: 4 }}>←</span> Anterior
+              </PaginationButton>
+              <PaginationInfo>
+                Página {page} de {totalPages}
+              </PaginationInfo>
+              <PaginationButton
+                onClick={handleNext}
+                disabled={page === totalPages}
+              >
+                Próxima <span style={{ fontSize: 20, marginLeft: 4 }}>→</span>
+              </PaginationButton>
+            </PaginationControls>
+          </TableWrapper>
+        </ChartWrapper>
       </Main>
     </Container>
   )
