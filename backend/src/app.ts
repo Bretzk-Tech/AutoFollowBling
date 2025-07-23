@@ -19,7 +19,25 @@ app.use('/mensagem', mensagemRoutes)
 
 app.use(errorHandler)
 
-// Rotina diária automática
+// Cron para buscar novos pedidos do Bling a cada hora
+import {
+  fetchAllPedidosFromBling,
+  savePedidoFromBling
+} from './services/blingService'
+cron.schedule('0 * * * *', async () => {
+  logger.info('Buscando novos pedidos do Bling (cron horária)...')
+  try {
+    const pedidos = await fetchAllPedidosFromBling()
+    for (const pedido of pedidos) {
+      await savePedidoFromBling(pedido)
+    }
+    logger.info(`Pedidos do Bling sincronizados: ${pedidos.length}`)
+  } catch (error) {
+    logger.error('Erro ao buscar pedidos do Bling na cron horária: ' + error)
+  }
+})
+
+// Rotina diária automática de mensagens
 cron.schedule('0 8 * * *', async () => {
   logger.info('Executando rotina automática de mensagens...')
   const clientes = await clientesParaMensagem()
