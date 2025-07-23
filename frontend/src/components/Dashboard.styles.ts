@@ -12,11 +12,9 @@ export const ChartWrapper = styled.div`
   box-shadow: 0 2px 16px #23294644;
   display: flex;
   margin: 0 auto;
-  margin-bottom: 24px;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  /* border: 1px solid red; */
 `
 export const PaginationInfo = styled.span`
   font-weight: 700;
@@ -56,13 +54,12 @@ export const PaginationButton = styled.button<PaginationButtonProps>`
 `
 export const TableWrapper = styled.div`
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   box-sizing: border-box;
   overflow-x: auto;
   background: #232946;
   border-radius: 16px;
-  padding: 24px;
 `
 // Botões de filtro do gráfico
 export const FilterButtonGroup = styled.div`
@@ -88,6 +85,8 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   display: flex;
+  align-items: center;
+  width: 100vw;
   min-height: 100vh;
   background: linear-gradient(120deg, #232946 0%, #232946 60%, #1a1a2e 100%);
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
@@ -180,8 +179,8 @@ export const SidebarVersion = styled.div`
 export const Main = styled.main`
   flex: 1;
   padding: 40px 4vw 0 4vw;
-  /* width: calc(100% - 240px); */
-  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
   margin-left: 240px;
   border-radius: 18px;
   display: flex;
@@ -210,12 +209,17 @@ export const Subtitle = styled.p`
 `
 
 export const SectionTitle = styled.h2`
-  font-size: 28px;
+  font-size: 24px;
   color: #fff;
   margin-bottom: 22px;
   font-weight: 800;
   letter-spacing: -1px;
   text-shadow: 0 2px 8px #23294644;
+  letter-spacing: 0.2;
+  text-shadow: none;
+  border-bottom: 1px solid #e5e7eb;
+  width: auto;
+  max-width: 200px;
 `
 
 // Removido CardsWrapper duplicado
@@ -236,6 +240,7 @@ export const Table = styled.table`
   border-spacing: 0;
   background: #f7fafc;
   font-size: 16px;
+  padding: 10px;
 `
 
 export const TableHeadRow = styled.tr`
