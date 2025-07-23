@@ -1,4 +1,5 @@
 import React from 'react'
+import Chart from './Chart'
 import mockStats from '../mockStats.json'
 import {
   Container,
@@ -108,6 +109,21 @@ export default function Dashboard() {
             erro={stats.mes.erro}
           />
         </CardsWrapper>
+        {/* Gráfico de vendas */}
+        <SectionTitle>Gráfico de Vendas</SectionTitle>
+        <div
+          style={{
+            width: '100%',
+            maxWidth: 600,
+            margin: '0 auto 32px auto',
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 2px 8px #f6d36522',
+            padding: 24
+          }}
+        >
+          <Chart />
+        </div>
         <SectionTitle>Últimos envios</SectionTitle>
         <CardsWrapper>
           <Table>
