@@ -201,11 +201,7 @@ export default function Dashboard() {
           <Chart />
         </ChartWrapper>
 
-        <ChartWrapper
-          style={{
-            paddingBottom: '40px'
-          }}
-        >
+        <ChartWrapper>
           <TableWrapper>
             <SectionTitle>Últimos envios</SectionTitle>
             <Table

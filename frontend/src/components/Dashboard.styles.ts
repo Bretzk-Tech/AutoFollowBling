@@ -7,14 +7,14 @@ export const PaginationControls = styled.div`
 `
 export const ChartWrapper = styled.div`
   width: 100%;
-  background: #232946;
   border-radius: 16px;
-  box-shadow: 0 2px 16px #23294644;
+  /* box-shadow: 0 2px 16px #23294644; */
   display: flex;
   margin: 0 auto;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  padding-bottom: 40px;
 `
 export const PaginationInfo = styled.span`
   font-weight: 700;
@@ -54,14 +54,12 @@ export const PaginationButton = styled.button<PaginationButtonProps>`
 `
 export const TableWrapper = styled.div`
   width: 100%;
-  max-width: 1100px;
+  max-width: 1050px;
   margin: 0 auto;
   box-sizing: border-box;
   overflow-x: auto;
-  background: #232946;
   border-radius: 16px;
 `
-// Botões de filtro do gráfico
 export const FilterButtonGroup = styled.div`
   display: flex;
   gap: 12px;
@@ -86,7 +84,7 @@ import styled from 'styled-components'
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background: linear-gradient(120deg, #232946 0%, #232946 60%, #1a1a2e 100%);
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
@@ -179,7 +177,6 @@ export const SidebarVersion = styled.div`
 export const Main = styled.main`
   flex: 1;
   padding: 40px 4vw 0 4vw;
-  width: 100%;
   margin: 0 auto;
   margin-left: 240px;
   border-radius: 18px;
