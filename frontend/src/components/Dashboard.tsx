@@ -91,39 +91,67 @@ export default function Dashboard() {
       <Main>
         <Title>Dashboard de Mensagens</Title>
         <Subtitle>Resumo dos envios de WhatsApp</Subtitle>
-        <CardsWrapper>
-          <ResumoCard
-            titulo='Hoje'
-            sucesso={stats.dia.sucesso}
-            erro={stats.dia.erro}
-            destaque
-          />
-          <ResumoCard
-            titulo='Semana'
-            sucesso={stats.semana.sucesso}
-            erro={stats.semana.erro}
-          />
-          <ResumoCard
-            titulo='Mês'
-            sucesso={stats.mes.sucesso}
-            erro={stats.mes.erro}
-          />
-        </CardsWrapper>
-        {/* Gráfico de vendas */}
-        <SectionTitle>Gráfico de Vendas</SectionTitle>
-        <div
+        <CardsWrapper
           style={{
-            width: '100%',
-            maxWidth: 600,
-            margin: '0 auto 32px auto',
-            background: '#fff',
-            borderRadius: 12,
-            boxShadow: '0 2px 8px #f6d36522',
-            padding: 24
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 24,
+            alignItems: 'stretch',
+            justifyContent: 'center',
+            marginBottom: 24
           }}
         >
-          <Chart />
-        </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+              minWidth: 220,
+              flex: '1 1 220px',
+              maxWidth: 320
+            }}
+          >
+            <ResumoCard
+              titulo='Hoje'
+              sucesso={stats.dia.sucesso}
+              erro={stats.dia.erro}
+              destaque
+            />
+            <ResumoCard
+              titulo='Semana'
+              sucesso={stats.semana.sucesso}
+              erro={stats.semana.erro}
+            />
+            <ResumoCard
+              titulo='Mês'
+              sucesso={stats.mes.sucesso}
+              erro={stats.mes.erro}
+            />
+          </div>
+          <div
+            style={{
+              flex: '2 1 400px',
+              minWidth: 320,
+              maxWidth: 600,
+              width: '100%',
+              background: '#fff',
+              borderRadius: 12,
+              boxShadow: '0 2px 8px #f6d36522',
+              padding: 24,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <SectionTitle style={{ textAlign: 'center', marginBottom: 8 }}>
+              Gráfico de Envios
+            </SectionTitle>
+            <Chart />
+          </div>
+        </CardsWrapper>
+        {/* Gráfico de vendas */}
+
         <SectionTitle>Últimos envios</SectionTitle>
         <CardsWrapper>
           <Table>
