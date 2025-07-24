@@ -5,8 +5,8 @@ import logger from '../utils/logger'
 const BLING_API_URL = 'https://www.bling.com.br/Api/v2/pedidos/json/'
 const BLING_API_KEY = process.env.BLING_API_KEY || ''
 
+// Busca paginada de todos os pedidos do Bling
 export async function fetchAllPedidosFromBling() {
-  // Busca paginada de todos os pedidos do Bling
   let pagina = 1
   let pedidos: any[] = []
   let totalPaginas = 1
@@ -34,8 +34,8 @@ export async function fetchAllPedidosFromBling() {
   }
 }
 
+// Adapte o mapeamento conforme o retorno real da API do Bling
 export async function savePedidoFromBling(pedidoBling: any) {
-  // Adapte o mapeamento conforme o retorno real da API do Bling
   const clienteData = pedidoBling.cliente
   const pedidoData = pedidoBling.pedido
   const cpfCnpj = clienteData.cnpj || clienteData.cpf
