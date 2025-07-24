@@ -1,5 +1,9 @@
 import prisma from '../prismaClient'
 
+/**
+ * Calcula o tempo médio (em milissegundos) entre os pedidos de um cliente.
+ * Retorna null se houver menos de dois pedidos.
+ */
 export async function calcularTempoMedioEntrePedidos(clienteId: number) {
   const pedidos = await prisma.pedido.findMany({
     where: { clienteId },
@@ -14,6 +18,11 @@ export async function calcularTempoMedioEntrePedidos(clienteId: number) {
   return soma / (pedidos.length - 1)
 }
 
+/**
+ * Retorna uma lista de clientes que devem receber mensagem de follow-up.
+ * A seleção é feita com base no tempo médio entre pedidos do cliente e na diferença de dias desde o último pedido.
+ * Se o tempo desde o último pedido for maior ou igual ao tempo médio (ou 90 dias), o cliente é incluído para receber mensagem.
+ */
 export async function clientesParaMensagem() {
   const clientes = await prisma.cliente.findMany({
     include: { pedidos: true }
