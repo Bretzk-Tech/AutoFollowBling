@@ -4,26 +4,26 @@
 const axios = require('axios')
 const dayjs = require('dayjs')
 
-// Configure sua API Key do Bling aqui
-// Substitua pelo seu código de autorização obtido no redirect
-const AUTH_CODE = '4b7adc9dd048af4d44d02f9e8057b4c7c9e472f2'
+// Configurações fixas
 const CLIENT_ID = 'e9a6e55a2b525b29bf90eb085648e8c008f34e0d'
 const CLIENT_SECRET =
   '1fd9f91b18e2d7f7136f1c3dcffa1aa2551ad7352afb0e02cda1bb2dcb38'
-const REDIRECT_URI = 'https://2maker.com.br/'
 
-async function obterToken() {
+let ACCESS_TOKEN = '70fc27b7013b34e06673ca800096435d28332668'
+let REFRESH_TOKEN = '0ce814fa470b23b6bad48705de9d63db77fe79b0'
+
+async function refreshToken() {
   try {
     const qs = require('querystring')
     const data = qs.stringify({
-      grant_type: 'authorization_code',
-      code: AUTH_CODE,
-      redirect_uri: REDIRECT_URI,
+      grant_type: 'refresh_token',
+      refresh_token: REFRESH_TOKEN,
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET
     })
+
     const response = await axios.post(
-      'https://api.bling.com.br/Api/v3/contatos',
+      'https://www.bling.com.br/Api/v3/oauth/token',
       data,
       {
         headers: {
@@ -31,20 +31,27 @@ async function obterToken() {
         }
       }
     )
+
     const accessToken = response.data.access_token
-    console.log('Access Token:', accessToken)
+    if (response.data.refresh_token) {
+      REFRESH_TOKEN = response.data.refresh_token
+    }
+    console.log('🔄 Novo Access Token via refresh_token:', accessToken)
     return accessToken
   } catch (error) {
     console.error(
-      'Erro ao obter token:',
-      error.response ? error.response.data : error.message
+      '❌ Erro ao usar refresh_token:',
+      error.response?.data || error.message
     )
     return null
   }
 }
 
+// 1. Buscar pedidos dos últimos 30 dias
 async function buscarPedidos(accessToken) {
-  const url = 'https://api.bling.com.br/Api/v3/pedidos'
+  // Buscar os 500 pedidos mais recentes, sem filtro de data
+  const url = 'https://www.bling.com.br/Api/v3/pedidos/vendas?pagina=1&limite=5'
+
   try {
     const response = await axios.get(url, {
       headers: {
@@ -52,19 +59,30 @@ async function buscarPedidos(accessToken) {
         'Content-Type': 'application/json'
       }
     })
-    console.log('Pedidos:', response.data)
+    console.log('📦 Pedidos recebidos:')
+    console.log(response.data)
+    return true
   } catch (error) {
     console.error(
-      'Erro ao buscar pedidos:',
-      error.response ? error.response.data : error.message
+      '❌ Erro ao buscar pedidos:',
+      error.response?.data || error.message
     )
+    return false
   }
 }
 
+// 2. Executar
 async function main() {
-  const token = await obterToken()
-  if (token) {
-    await buscarPedidos(token)
+  let ok = await buscarPedidos(ACCESS_TOKEN)
+  if (!ok) {
+    console.log('Tentando obter novo token via refresh_token...')
+    const newToken = await refreshToken()
+    if (newToken) {
+      ACCESS_TOKEN = newToken
+      await buscarPedidos(ACCESS_TOKEN)
+    } else {
+      console.error('❌ Não foi possível obter um access token válido.')
+    }
   }
 }
 
