@@ -1,6 +1,24 @@
 import React from 'react'
 import Chart from './Chart'
 import mockStats from '../mockStats.json'
+
+async function fetchStats(): Promise<Stats | null> {
+  try {
+    const res = await fetch('/dashboard/stats')
+    if (!res.ok) return null
+    const data = await res.json()
+    // Considera vazio se ultimos não existir ou for array vazio
+    if (
+      !data.ultimos ||
+      !Array.isArray(data.ultimos) ||
+      data.ultimos.length === 0
+    )
+      return null
+    return data
+  } catch {
+    return null
+  }
+}
 import {
   Container,
   Sidebar,
@@ -90,9 +108,18 @@ function ResumoCard({
 }
 
 export default function Dashboard() {
-  const stats = mockStats as Stats
+  const [stats, setStats] = React.useState<Stats | null>(null)
   const [page, setPage] = React.useState(1)
   const itemsPerPage = 8
+
+  React.useEffect(() => {
+    fetchStats().then(data => {
+      setStats(data || (mockStats as Stats))
+    })
+  }, [])
+
+  if (!stats) return <div>Carregando...</div>
+
   const totalItems = stats.ultimos.length
   const totalPages = Math.ceil(totalItems / itemsPerPage)
   const paginated = stats.ultimos.slice(

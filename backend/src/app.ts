@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import cron from 'node-cron'
 import blingRoutes from './routes/blingRoutes'
 import mensagemRoutes from './routes/mensagemRoutes'
+import dashboardRoutes from './routes/dashboardRoutes'
 import { clientesParaMensagem } from './services/pedidoService'
 import { enviarMensagemWhatsApp } from './services/whatsappService'
 import { errorHandler } from './middlewares/errorHandler'
@@ -16,6 +17,7 @@ app.use(express.json())
 
 app.use('/bling', blingRoutes)
 app.use('/mensagem', mensagemRoutes)
+app.use('/dashboard', dashboardRoutes)
 
 app.use(errorHandler)
 
