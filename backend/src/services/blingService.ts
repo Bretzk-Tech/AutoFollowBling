@@ -1,5 +1,5 @@
 import axios from 'axios'
-import prisma from '../prismaClient'
+import prisma from '../config/prismaClient'
 import logger from '../utils/logger'
 
 const BLING_API_URL_CONTATOS = 'https://www.bling.com.br/Api/v3/contatos'

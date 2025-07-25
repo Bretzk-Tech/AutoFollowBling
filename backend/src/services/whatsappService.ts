@@ -1,6 +1,6 @@
 // Importa dependências necessárias
 import axios from 'axios'
-import prisma from '../prismaClient'
+import prisma from '../config/prismaClient'
 import logger from '../utils/logger'
 
 // URL e Token da API do WhatsApp, definidos via variáveis de ambiente
