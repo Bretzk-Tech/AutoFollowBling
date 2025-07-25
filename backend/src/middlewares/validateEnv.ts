@@ -3,7 +3,7 @@ dotenv.config()
 
 const requiredVars = [
   'DATABASE_URL',
-  'BLING_API_KEY',
+  'BLING_API_TOKEN',
   'WHATSAPP_API_URL',
   'WHATSAPP_API_TOKEN'
 ]
