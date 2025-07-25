@@ -1,3 +1,5 @@
+import { Request, Response } from 'express'
+import prisma from '../config/prismaClient'
 import dayjs from 'dayjs'
 // Lista contatos monitorados com dados de recompra
 export async function getContatosMonitorados(req: Request, res: Response) {
@@ -6,7 +8,7 @@ export async function getContatosMonitorados(req: Request, res: Response) {
       include: { contato: true }
     })
     const hoje = dayjs()
-    const lista = contatos.map(c => ({
+    const lista = contatos.map((c: any) => ({
       nome: c.contato?.nome || '',
       telefone: c.contato?.celular || '',
       quantidadePedidos: c.quantidadePedidos,
@@ -18,8 +20,7 @@ export async function getContatosMonitorados(req: Request, res: Response) {
     res.status(500).json({ error: 'Erro ao buscar contatos monitorados' })
   }
 }
-import { Request, Response } from 'express'
-import prisma from '../config/prismaClient'
+// ...existing code...
 
 // Gera estatísticas para o dashboard
 

@@ -15,9 +15,13 @@ export async function sincronizarBling(req: Request, res: Response) {
     await sincronizarPedidosEContatos(pedidos, contatos)
     await atualizarMonitoramentoClientes()
     res.status(200).json({ message: 'Sincronização manual concluída' })
-  } catch (error) {
-    logger.error('Erro na sincronização manual: ' + error)
-    res.status(500).json({ error: 'Erro ao sincronizar' })
+  } catch (error: any) {
+    logger.error('Erro na sincronização manual: ' + (error?.stack || error))
+    res.status(500).json({
+      error: 'Erro ao sincronizar',
+      details: error?.message || error,
+      stack: error?.stack || undefined
+    })
   }
 }
 

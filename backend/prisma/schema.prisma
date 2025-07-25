@@ -33,9 +33,9 @@ model Contato {
 model ClientesMonitorados {
   contatoId              BigInt   @id
   quantidadePedidos      Int
-  periodoCompraMediaDias Int
+  periodoCompraMediaDias Int?
   ultimaCompra           DateTime
-  proximaCompraPrevista  DateTime
+  proximaCompraPrevista  DateTime?
   mensagemEnviada        Boolean
 
   contato                Contato  @relation(fields: [contatoId], references: [id])

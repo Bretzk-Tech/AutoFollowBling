@@ -102,7 +102,7 @@ export default function Dashboard() {
   async function fetchContatosMonitorados() {
     try {
       const res = await axios.get('http://localhost:3001/dashboard/contatos')
-      console.log('Contatos monitorados:', res)
+      console.log('Contatos monitorados:', res.data)
       return res.data
     } catch {
       console.log('Erro ao buscar contatos monitorados')
@@ -123,6 +123,20 @@ export default function Dashboard() {
       return data
     } catch {
       return null
+    }
+  }
+
+  // Sincronização manual
+  const handleSincronizar = async () => {
+    try {
+      await axios.post('http://localhost:3001/bling/sincronizar')
+      // Após sincronizar, recarrega os dados
+      fetchStats().then(data => {
+        setStats(data || (mockStats as Stats))
+      })
+      fetchContatosMonitorados().then(setContatos)
+    } catch (e) {
+      alert('Erro ao sincronizar!')
     }
   }
 
@@ -213,6 +227,22 @@ export default function Dashboard() {
       {/* Main content */}
       <Main>
         <Title>Dashboard de Mensagens</Title>
+        <button
+          style={{
+            marginBottom: 16,
+            padding: '8px 18px',
+            background: '#6c63ff',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 6,
+            fontWeight: 700,
+            cursor: 'pointer',
+            fontSize: 16
+          }}
+          onClick={handleSincronizar}
+        >
+          Sincronizar Bling
+        </button>
         <Subtitle style={{ color: '#bfc8e2', fontSize: 18, marginBottom: 32 }}>
           Resumo dos envios de WhatsApp
         </Subtitle>
@@ -311,7 +341,12 @@ export default function Dashboard() {
                     <Td>{c.nome}</Td>
                     <Td>{c.telefone}</Td>
                     <Td>{c.quantidadePedidos}</Td>
-                    <Td>{c.periodoCompraMediaDias}</Td>
+                    <Td>
+                      {c.quantidadePedidos < 2 ||
+                      c.periodoCompraMediaDias == null
+                        ? 'Ainda não existe'
+                        : c.periodoCompraMediaDias}
+                    </Td>
                     <Td>{c.diasParaProximaCompra}</Td>
                   </TableRow>
                 ))}

@@ -62,7 +62,27 @@ export async function atualizarMonitoramentoClientes() {
   })
 
   for (const contato of contatos) {
-    if (contato.pedidos.length < 2) continue
+    if (contato.pedidos.length < 2) {
+      // Cria ou atualiza registro mesmo com menos de 2 pedidos
+      await prisma.clientesMonitorados.upsert({
+        where: { contatoId: contato.id },
+        update: {
+          quantidadePedidos: contato.pedidos.length,
+          periodoCompraMediaDias: null,
+          ultimaCompra: contato.pedidos[0]?.data || null,
+          proximaCompraPrevista: null
+        },
+        create: {
+          contatoId: contato.id,
+          quantidadePedidos: contato.pedidos.length,
+          periodoCompraMediaDias: null,
+          ultimaCompra: contato.pedidos[0]?.data || null,
+          proximaCompraPrevista: null,
+          mensagemEnviada: false
+        }
+      })
+      continue
+    }
     // Ordena pedidos por data
     const pedidosOrdenados = contato.pedidos.sort(
       (a, b) => a.data.getTime() - b.data.getTime()
