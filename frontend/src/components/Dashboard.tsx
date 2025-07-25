@@ -260,8 +260,8 @@ export default function Dashboard() {
                 {paginated.map((msg, i) => (
                   <TableRowMsg
                     key={i + (page - 1) * itemsPerPage}
-                    hoverable
-                    even={(i + (page - 1) * itemsPerPage) % 2 === 0}
+                    $hoverable
+                    $even={(i + (page - 1) * itemsPerPage) % 2 === 0}
                   >
                     <TdMsg>{msg.data}</TdMsg>
                     <TdMsg>{msg.cliente}</TdMsg>
@@ -307,7 +307,7 @@ export default function Dashboard() {
               </thead>
               <tbody>
                 {contatos.map((c, i) => (
-                  <TableRow key={i} even={i % 2 === 0}>
+                  <TableRow key={i} $even={i % 2 === 0}>
                     <Td>{c.nome}</Td>
                     <Td>{c.telefone}</Td>
                     <Td>{c.quantidadePedidos}</Td>

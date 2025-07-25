@@ -20,13 +20,13 @@ export const TdMsg = styled.td<{ status?: string }>`
   border: 1px solid #e5e7eb;
 `
 
-export const TableRowMsg = styled.tr<{ even?: boolean; hoverable?: boolean }>`
-  background: ${({ even }) => (even ? '#fff' : '#f4f6fa')};
+export const TableRowMsg = styled.tr<{ $even?: boolean; $hoverable?: boolean }>`
+  background: ${({ $even }) => ($even ? '#fff' : '#f4f6fa')};
   transition: background 0.2s;
   border-bottom: 1px solid #e5e7eb;
-  cursor: ${({ hoverable }) => (hoverable ? 'pointer' : 'default')};
+  cursor: ${({ $hoverable }) => ($hoverable ? 'pointer' : 'default')};
   &:hover {
-    background: ${({ hoverable }) => (hoverable ? '#f6d36511' : undefined)};
+    background: ${({ $hoverable }) => ($hoverable ? '#f6d36511' : undefined)};
   }
 `
 export const PaginationControls = styled.div`
@@ -305,15 +305,15 @@ export const Td = styled.td`
 `
 
 interface TableRowProps {
-  hoverable?: boolean
-  even?: boolean
+  $hoverable?: boolean
+  $even?: boolean
 }
 export const TableRow = styled.tr<TableRowProps>`
-  background: ${({ even }) => (even ? '#fff' : '#f7fafc')};
+  background: ${({ $even }) => ($even ? '#fff' : '#f7fafc')};
   transition: background 0.2s;
-  cursor: ${({ hoverable }) => (hoverable ? 'pointer' : 'default')};
+  cursor: ${({ $hoverable }) => ($hoverable ? 'pointer' : 'default')};
   &:hover {
-    background: ${({ hoverable }) => (hoverable ? '#f6d36511' : undefined)};
+    background: ${({ $hoverable }) => ($hoverable ? '#f6d36511' : undefined)};
   }
 `
 
