@@ -3,9 +3,9 @@ import axios from 'axios'
 import prisma from '../config/prismaClient'
 import logger from '../utils/logger'
 
-// URL e Token da API do WhatsApp, definidos via variáveis de ambiente
-const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL || ''
-const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN || ''
+// URL e Token da API do WhatsApp (não utilizados enquanto o envio está desativado)
+// const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL || ''
+// const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN || ''
 
 /**
  * Envia uma mensagem de WhatsApp para o cliente, caso ainda não tenha sido enviada hoje.
@@ -14,6 +14,8 @@ const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN || ''
  * @param diffDias Quantidade de dias desde o último pedido
  */
 export async function enviarMensagemWhatsApp(cliente: any, diffDias: number) {
+  // Lógica de envio de mensagens comentada para futura implementação/correção
+  /*
   // Monta a mensagem personalizada
   const mensagem = `Olá ${cliente.nome}, faz ${diffDias} dias desde sua última compra! Aproveite nossas ofertas!`
 
@@ -53,4 +55,5 @@ export async function enviarMensagemWhatsApp(cliente: any, diffDias: number) {
     // Loga erro caso o envio falhe
     logger.error('Erro ao enviar mensagem WhatsApp: ' + error)
   }
+  */
 }

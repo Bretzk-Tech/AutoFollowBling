@@ -1,24 +1,8 @@
 import React from 'react'
 import Chart from './Chart'
 import mockStats from '../mockStats.json'
+import axios from 'axios'
 
-async function fetchStats(): Promise<Stats | null> {
-  try {
-    const res = await fetch('/dashboard/stats')
-    if (!res.ok) return null
-    const data = await res.json()
-    // Considera vazio se ultimos não existir ou for array vazio
-    if (
-      !data.ultimos ||
-      !Array.isArray(data.ultimos) ||
-      data.ultimos.length === 0
-    )
-      return null
-    return data
-  } catch {
-    return null
-  }
-}
 import {
   Container,
   Sidebar,
@@ -48,7 +32,9 @@ import {
   PaginationButton,
   PaginationInfo,
   ChartWrapper,
-  PaginationControls
+  PaginationControls,
+  TableRow,
+  Td
 } from './Dashboard.styles'
 
 interface Stats {
@@ -109,13 +95,42 @@ function ResumoCard({
 
 export default function Dashboard() {
   const [stats, setStats] = React.useState<Stats | null>(null)
+  const [contatos, setContatos] = React.useState<any[]>([])
   const [page, setPage] = React.useState(1)
   const itemsPerPage = 8
+
+  async function fetchContatosMonitorados() {
+    try {
+      const res = await axios.get('http://localhost:3001/dashboard/contatos')
+      console.log('Contatos monitorados:', res)
+      return res.data
+    } catch {
+      console.log('Erro ao buscar contatos monitorados')
+    }
+  }
+  async function fetchStats(): Promise<Stats | null> {
+    try {
+      const res = await fetch('/dashboard/stats')
+      if (!res.ok) return null
+      const data = await res.json()
+      // Considera vazio se ultimos não existir ou for array vazio
+      if (
+        !data.ultimos ||
+        !Array.isArray(data.ultimos) ||
+        data.ultimos.length === 0
+      )
+        return null
+      return data
+    } catch {
+      return null
+    }
+  }
 
   React.useEffect(() => {
     fetchStats().then(data => {
       setStats(data || (mockStats as Stats))
     })
+    fetchContatosMonitorados().then(setContatos)
   }, [])
 
   if (!stats) return <div>Carregando...</div>
@@ -273,6 +288,35 @@ export default function Dashboard() {
                 Próxima <span style={{ fontSize: 18, marginLeft: 4 }}>→</span>
               </PaginationButton>
             </PaginationControls>
+          </TableWrapper>
+        </ChartWrapper>
+
+        {/* Nova lista: Períodos de compra */}
+        <ChartWrapper style={{ paddingBottom: '40px' }}>
+          <TableWrapper>
+            <SectionTitle>Períodos de compra</SectionTitle>
+            <Table>
+              <thead>
+                <TableHeadRow>
+                  <Th>Nome</Th>
+                  <Th>Telefone</Th>
+                  <Th>Qtd. Pedidos</Th>
+                  <Th>Período médio (dias)</Th>
+                  <Th>Dias p/ próxima compra</Th>
+                </TableHeadRow>
+              </thead>
+              <tbody>
+                {contatos.map((c, i) => (
+                  <TableRow key={i} even={i % 2 === 0}>
+                    <Td>{c.nome}</Td>
+                    <Td>{c.telefone}</Td>
+                    <Td>{c.quantidadePedidos}</Td>
+                    <Td>{c.periodoCompraMediaDias}</Td>
+                    <Td>{c.diasParaProximaCompra}</Td>
+                  </TableRow>
+                ))}
+              </tbody>
+            </Table>
           </TableWrapper>
         </ChartWrapper>
       </Main>

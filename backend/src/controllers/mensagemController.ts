@@ -5,7 +5,19 @@ import { enviarMensagemWhatsApp } from '../services/whatsappService'
 export async function rotinaMensagens(req: Request, res: Response) {
   const clientes = await clientesParaMensagem()
   for (const item of clientes) {
-    await enviarMensagemWhatsApp(item.cliente, item.diffDias)
+    // O diffDias pode ser calculado como a diferença entre hoje e a última compra
+    const diffDias = Math.floor(
+      (Date.now() - new Date(item.ultimaCompra).getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
+    await enviarMensagemWhatsApp(
+      {
+        ...item.contato,
+        mensagemEnviada: item.mensagemEnviada,
+        id: item.contatoId
+      },
+      diffDias
+    )
   }
   res
     .status(200)
