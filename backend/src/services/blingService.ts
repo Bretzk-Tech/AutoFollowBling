@@ -7,37 +7,73 @@ const BLING_API_URL_PEDIDOS = 'https://www.bling.com.br/Api/v3/pedidos/vendas'
 
 // Busca todos os pedidos do Bling em uma única requisição
 export async function buscarPedidos(accessToken: string) {
+  const pedidos: any[] = []
+  let page = 1
+  const limit = 100
+  let hasMore = true
   try {
-    const response = await axios.get(BLING_API_URL_PEDIDOS, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    while (hasMore) {
+      const response = await axios.get(BLING_API_URL_PEDIDOS, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        params: {
+          limit,
+          page
+        }
+      })
+      const data = response.data.data || []
+      pedidos.push(...data)
+      console.log(`📦 Página ${page} - Pedidos recebidos:`, data.length)
+      if (data.length < limit) {
+        hasMore = false
+      } else {
+        page++
       }
-    })
-    console.log('📦 Pedidos recebidos:', response.data.data.length)
-    return response.data.data
-  } catch ({ error }: any) {
-    return console.error(
+    }
+    return pedidos
+  } catch (err: any) {
+    console.error(
       '❌ Erro ao buscar pedidos:',
-      error.response?.data || error.message
+      err?.response?.data || err?.message
     )
+    return []
   }
 }
 
 export async function buscarContatos(accessToken: string) {
+  const contatos: any[] = []
+  let page = 1
+  const limit = 100
+  let hasMore = true
   try {
-    const response = await axios.get(BLING_API_URL_CONTATOS, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    while (hasMore) {
+      const response = await axios.get(BLING_API_URL_CONTATOS, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        params: {
+          limit,
+          page
+        }
+      })
+      const data = response.data.data || []
+      contatos.push(...data)
+      console.log(`🙎 Página ${page} - Contatos encontrados:`, data.length)
+      if (data.length < limit) {
+        hasMore = false
+      } else {
+        page++
       }
-    })
-    console.log('🙎 Contatos encontrados:', response.data.data.length)
-    return response.data.data
-  } catch ({ error }: any) {
-    return console.error(
+    }
+    return contatos
+  } catch (err: any) {
+    console.error(
       '❌ Erro ao buscar contatos:',
-      error.response?.data || error.message
+      err?.response?.data || err?.message
     )
+    return []
   }
 }
