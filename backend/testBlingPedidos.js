@@ -9,25 +9,29 @@ const CLIENT_ID = 'e9a6e55a2b525b29bf90eb085648e8c008f34e0d'
 const CLIENT_SECRET =
   '1fd9f91b18e2d7f7136f1c3dcffa1aa2551ad7352afb0e02cda1bb2dcb38'
 
-let ACCESS_TOKEN = '70fc27b7013b34e06673ca800096435d28332668'
-let REFRESH_TOKEN = '0ce814fa470b23b6bad48705de9d63db77fe79b0'
+let ACCESS_TOKEN = '665ee2acc6b1e73cb3add0c295d91b06388e2bab'
+let REFRESH_TOKEN = '2752d7ea83abf01a0df1c2897f8f0416187d44e6'
 
 async function refreshToken() {
   try {
     const qs = require('querystring')
     const data = qs.stringify({
       grant_type: 'refresh_token',
-      refresh_token: REFRESH_TOKEN,
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET
+      refresh_token: REFRESH_TOKEN
     })
+
+    // Monta o header Authorization: Basic base64(client_id:client_secret)
+    const basicAuth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString(
+      'base64'
+    )
 
     const response = await axios.post(
       'https://www.bling.com.br/Api/v3/oauth/token',
       data,
       {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Basic ${basicAuth}`
         }
       }
     )
@@ -47,10 +51,9 @@ async function refreshToken() {
   }
 }
 
-// 1. Buscar pedidos dos últimos 30 dias
+// 1. Buscar pedidos
 async function buscarPedidos(accessToken) {
-  // Buscar os 500 pedidos mais recentes, sem filtro de data
-  const url = 'https://www.bling.com.br/Api/v3/pedidos/vendas?pagina=1&limite=5'
+  const url = 'https://www.bling.com.br/Api/v3/contatos'
 
   try {
     const response = await axios.get(url, {
@@ -59,8 +62,8 @@ async function buscarPedidos(accessToken) {
         'Content-Type': 'application/json'
       }
     })
-    console.log('📦 Pedidos recebidos:')
-    console.log(response.data)
+    console.log('📦 Pedidos recebidos:', response.data.data)
+    console.log('Total de contatos:', response.data.data.length)
     return true
   } catch (error) {
     console.error(

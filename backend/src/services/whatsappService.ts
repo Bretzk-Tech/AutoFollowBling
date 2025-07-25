@@ -17,42 +17,9 @@ export async function enviarMensagemWhatsApp(cliente: any, diffDias: number) {
   // Monta a mensagem personalizada
   const mensagem = `Olá ${cliente.nome}, faz ${diffDias} dias desde sua última compra! Aproveite nossas ofertas!`
 
-  // Evitar duplicidade: verifica se já enviou mensagem hoje para este cliente
-  const hoje = new Date()
-  const inicioDia = new Date(
-    hoje.getFullYear(),
-    hoje.getMonth(),
-    hoje.getDate(),
-    0,
-    0,
-    0
-  )
-  const fimDia = new Date(
-    hoje.getFullYear(),
-    hoje.getMonth(),
-    hoje.getDate(),
-    23,
-    59,
-    59
-  )
-
-  // Consulta se já existe registro de envio hoje
-  const jaEnviou = await prisma.historicoMensagem.findFirst({
-    where: {
-      clienteId: cliente.id,
-      tipo: 'whatsapp',
-      dataEnvio: {
-        gte: inicioDia,
-        lte: fimDia
-      }
-    }
-  })
-
-  // Se já enviou, registra no log e retorna
-  if (jaEnviou) {
-    logger.info(
-      `Mensagem já enviada hoje para ${cliente.nome} (${cliente.telefone})`
-    )
+  // Evitar duplicidade: verifica se já enviou mensagem para este cliente (mensagemEnviada)
+  if (cliente.mensagemEnviada) {
+    logger.info(`Mensagem já enviada para ${cliente.nome} (${cliente.celular})`)
     return
   }
 
@@ -61,7 +28,7 @@ export async function enviarMensagemWhatsApp(cliente: any, diffDias: number) {
     await axios.post(
       WHATSAPP_API_URL,
       {
-        phone: cliente.telefone,
+        phone: cliente.celular,
         message: mensagem
       },
       {
@@ -77,7 +44,11 @@ export async function enviarMensagemWhatsApp(cliente: any, diffDias: number) {
         tipo: 'whatsapp'
       }
     })
-    logger.info(`Mensagem enviada para ${cliente.nome} (${cliente.telefone})`)
+    // Marca mensagem como enviada no monitoramento
+    await import('./pedidoService').then(s =>
+      s.marcarMensagemEnviada(BigInt(cliente.id))
+    )
+    logger.info(`Mensagem enviada para ${cliente.nome} (${cliente.celular})`)
   } catch (error) {
     // Loga erro caso o envio falhe
     logger.error('Erro ao enviar mensagem WhatsApp: ' + error)

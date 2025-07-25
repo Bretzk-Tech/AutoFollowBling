@@ -1,13 +1,11 @@
 import { Router } from 'express'
-import {
-  importarPedidosBling,
-  webhookBling
-} from '../controllers/blingController'
+import { webhookBling, sincronizarBling } from '../controllers/blingController'
 import { validatePedidoBling } from '../middlewares/validatePedido'
 
 const router = Router()
 
-router.post('/importar', validatePedidoBling, importarPedidosBling)
+// Rota opcional para sincronização manual (útil para testes)
+router.post('/sincronizar', sincronizarBling)
 router.post('/webhook', validatePedidoBling, webhookBling)
 
 export default router

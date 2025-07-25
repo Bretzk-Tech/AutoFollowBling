@@ -1,51 +1,121 @@
 import prisma from '../prismaClient'
+import dayjs from 'dayjs'
 
 /**
- * Calcula o tempo médio (em milissegundos) entre os pedidos de um cliente.
- * Retorna null se houver menos de dois pedidos.
+ * Salva pedidos e contatos do Bling no banco de dados.
+ * Atualiza ou cria registros conforme necessário.
  */
-export async function calcularTempoMedioEntrePedidos(clienteId: number) {
-  const pedidos = await prisma.pedido.findMany({
-    where: { clienteId },
-    orderBy: { dataPedido: 'asc' }
-  })
-  if (pedidos.length < 2) return null
-  let soma = 0
-  for (let i = 1; i < pedidos.length; i++) {
-    soma +=
-      pedidos[i].dataPedido.getTime() - pedidos[i - 1].dataPedido.getTime()
+export async function sincronizarPedidosEContatos(
+  pedidos: any[],
+  contatos: any[]
+) {
+  // Salva contatos
+  for (const contato of contatos) {
+    await prisma.contato.upsert({
+      where: { id: BigInt(contato.id) },
+      update: {
+        nome: contato.nome,
+        celular: contato.celular
+      },
+      create: {
+        id: BigInt(contato.id),
+        nome: contato.nome,
+        celular: contato.celular
+      }
+    })
   }
-  return soma / (pedidos.length - 1)
+
+  // Salva pedidos
+  for (const pedido of pedidos) {
+    await prisma.pedido.upsert({
+      where: { id: BigInt(pedido.id) },
+      update: {
+        data: new Date(pedido.data),
+        totalProdutos: pedido.totalProdutos,
+        contatoId: BigInt(pedido.contatoId)
+      },
+      create: {
+        id: BigInt(pedido.id),
+        data: new Date(pedido.data),
+        totalProdutos: pedido.totalProdutos,
+        contatoId: BigInt(pedido.contatoId)
+      }
+    })
+  }
 }
 
 /**
- * Retorna uma lista de clientes que devem receber mensagem de follow-up.
- * A seleção é feita com base no tempo médio entre pedidos do cliente e na diferença de dias desde o último pedido.
- * Se o tempo desde o último pedido for maior ou igual ao tempo médio (ou 90 dias), o cliente é incluído para receber mensagem.
+ * Atualiza o monitoramento dos clientes: calcula média, próxima compra e status de mensagem.
  */
-export async function clientesParaMensagem() {
-  const clientes = await prisma.cliente.findMany({
+export async function atualizarMonitoramentoClientes() {
+  const contatos = await prisma.contato.findMany({
     include: { pedidos: true }
   })
-  const hoje = new Date()
-  const resultado: any[] = []
-  for (const cliente of clientes) {
-    if (cliente.pedidos.length === 0) continue
-    const pedidosOrdenados = cliente.pedidos.sort(
-      (a, b) => b.dataPedido.getTime() - a.dataPedido.getTime()
+
+  for (const contato of contatos) {
+    if (contato.pedidos.length < 2) continue
+    // Ordena pedidos por data
+    const pedidosOrdenados = contato.pedidos.sort(
+      (a, b) => a.data.getTime() - b.data.getTime()
     )
-    const ultimoPedido = pedidosOrdenados[0]
-    const diffDias = Math.floor(
-      (hoje.getTime() - ultimoPedido.dataPedido.getTime()) /
-        (1000 * 60 * 60 * 24)
-    )
-    const tempoMedio = await calcularTempoMedioEntrePedidos(cliente.id)
-    if (
-      (tempoMedio && diffDias >= tempoMedio / (1000 * 60 * 60 * 24)) ||
-      diffDias >= 90
-    ) {
-      resultado.push({ cliente, diffDias, tempoMedio })
+    // Calcula intervalos entre compras
+    const intervalos: number[] = []
+    for (let i = 1; i < pedidosOrdenados.length; i++) {
+      const diff = dayjs(pedidosOrdenados[i].data).diff(
+        dayjs(pedidosOrdenados[i - 1].data),
+        'day'
+      )
+      intervalos.push(diff)
     }
+    const mediaDias = Math.round(
+      intervalos.reduce((a, b) => a + b, 0) / intervalos.length
+    )
+    const ultimaCompra = pedidosOrdenados[pedidosOrdenados.length - 1].data
+    const proximaCompraPrevista = dayjs(ultimaCompra)
+      .add(mediaDias, 'day')
+      .toDate()
+
+    await prisma.clientesMonitorados.upsert({
+      where: { contatoId: contato.id },
+      update: {
+        quantidadePedidos: contato.pedidos.length,
+        periodoCompraMediaDias: mediaDias,
+        ultimaCompra,
+        proximaCompraPrevista
+        // Não reseta mensagemEnviada aqui
+      },
+      create: {
+        contatoId: contato.id,
+        quantidadePedidos: contato.pedidos.length,
+        periodoCompraMediaDias: mediaDias,
+        ultimaCompra,
+        proximaCompraPrevista,
+        mensagemEnviada: false
+      }
+    })
   }
-  return resultado
+}
+
+/**
+ * Retorna clientes que atingiram o período médio de recompra e ainda não receberam mensagem.
+ */
+export async function clientesParaMensagem() {
+  const hoje = new Date()
+  return prisma.clientesMonitorados.findMany({
+    where: {
+      proximaCompraPrevista: { lte: hoje },
+      mensagemEnviada: false
+    },
+    include: { contato: true }
+  })
+}
+
+/**
+ * Marca mensagem como enviada para o cliente monitorado.
+ */
+export async function marcarMensagemEnviada(contatoId: bigint) {
+  await prisma.clientesMonitorados.update({
+    where: { contatoId },
+    data: { mensagemEnviada: true }
+  })
 }

@@ -1,31 +1,39 @@
 import cron from 'node-cron'
 import logger from './utils/logger'
+import { buscarPedidos, buscarContatos } from './services/blingService'
 import {
-  fetchAllPedidosFromBling,
-  savePedidoFromBling
-} from './services/blingService'
-import { clientesParaMensagem } from './services/pedidoService'
+  sincronizarPedidosEContatos,
+  atualizarMonitoramentoClientes,
+  clientesParaMensagem
+} from './services/pedidoService'
 import { enviarMensagemWhatsApp } from './services/whatsappService'
 
-// Cron para buscar novos pedidos do Bling a cada 12 horas
-cron.schedule('0 */12 * * *', async () => {
-  logger.info('Buscando novos pedidos do Bling (cron horária)...')
+// Cron para sincronizar pedidos e contatos do Bling e atualizar monitoramento a cada dia às 2h
+cron.schedule('0 2 * * *', async () => {
+  logger.info('Sincronizando pedidos e contatos do Bling...')
   try {
-    const pedidos = await fetchAllPedidosFromBling()
-    for (const pedido of pedidos) {
-      await savePedidoFromBling(pedido)
-    }
-    logger.info(`Pedidos do Bling sincronizados: ${pedidos.length}`)
+    // TODO: obter accessToken de forma segura/configurada
+    const accessToken = process.env.BLING_API_TOKEN || ''
+    const pedidos = await buscarPedidos(accessToken)
+    const contatos = await buscarContatos(accessToken)
+    await sincronizarPedidosEContatos(pedidos, contatos)
+    await atualizarMonitoramentoClientes()
+    logger.info('Sincronização e atualização de monitoramento concluída.')
   } catch (error) {
-    logger.error('Erro ao buscar pedidos do Bling na cron horária: ' + error)
+    logger.error('Erro na sincronização diária: ' + error)
   }
 })
 
-// Rotina diária automática de mensagens
+// Rotina diária automática de mensagens às 8h
 cron.schedule('0 8 * * *', async () => {
   logger.info('Executando rotina automática de mensagens...')
   const clientes = await clientesParaMensagem()
-  for (const item of clientes) {
-    await enviarMensagemWhatsApp(item.cliente, item.diffDias)
+  for (const cliente of clientes) {
+    // diffDias = dias desde a última compra
+    const diffDias = Math.round(
+      (new Date().getTime() - cliente.ultimaCompra.getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
+    await enviarMensagemWhatsApp(cliente.contato, diffDias)
   }
 })
