@@ -11,6 +11,10 @@ export async function sincronizarPedidosEContatos(
 ) {
   // Salva contatos
   for (const contato of contatos) {
+    if (!contato.id) {
+      console.warn('Contato ignorado por falta de id:', contato)
+      continue
+    }
     await prisma.contato.upsert({
       where: { id: BigInt(contato.id) },
       update: {
@@ -27,20 +31,25 @@ export async function sincronizarPedidosEContatos(
 
   // Salva pedidos
   for (const pedido of pedidos) {
-    await prisma.pedido.upsert({
-      where: { id: BigInt(pedido.id) },
-      update: {
-        data: new Date(pedido.data),
-        totalProdutos: pedido.totalProdutos,
-        contatoId: BigInt(pedido.contatoId)
-      },
-      create: {
-        id: BigInt(pedido.id),
-        data: new Date(pedido.data),
-        totalProdutos: pedido.totalProdutos,
-        contatoId: BigInt(pedido.contatoId)
+    if (!pedido.id || !pedido.contato || !pedido.contato.id) {
+      console.warn('Pedido ignorado por falta de id ou contato.id:', pedido)
+      continue
+    }
+    try {
+      await prisma.pedido.create({
+        data: {
+          id: BigInt(pedido.id),
+          data: new Date(pedido.data),
+          totalProdutos: pedido.totalProdutos,
+          contatoId: BigInt(pedido.contato.id)
+        }
+      })
+    } catch (error: any) {
+      // Ignora erro de duplicidade (pedido já existe)
+      if (error.code !== 'P2002') {
+        console.error('Erro ao salvar pedido:', error)
       }
-    })
+    }
   }
 }
 
