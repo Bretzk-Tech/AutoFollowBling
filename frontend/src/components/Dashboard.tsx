@@ -97,7 +97,9 @@ export default function Dashboard() {
   const [stats, setStats] = React.useState<Stats | null>(null)
   const [contatos, setContatos] = React.useState<any[]>([])
   const [page, setPage] = React.useState(1)
+  const [contatosPage, setContatosPage] = React.useState(1)
   const itemsPerPage = 8
+  const contatosItemsPerPage = 8
 
   async function fetchContatosMonitorados() {
     try {
@@ -126,20 +128,6 @@ export default function Dashboard() {
     }
   }
 
-  // Sincronização manual
-  const handleSincronizar = async () => {
-    try {
-      await axios.post('http://localhost:3001/bling/sincronizar')
-      // Após sincronizar, recarrega os dados
-      fetchStats().then(data => {
-        setStats(data || (mockStats as Stats))
-      })
-      fetchContatosMonitorados().then(setContatos)
-    } catch (e) {
-      alert('Erro ao sincronizar!')
-    }
-  }
-
   React.useEffect(() => {
     fetchStats().then(data => {
       setStats(data || (mockStats as Stats))
@@ -157,6 +145,18 @@ export default function Dashboard() {
   )
   const handlePrev = () => setPage(p => Math.max(1, p - 1))
   const handleNext = () => setPage(p => Math.min(totalPages, p + 1))
+  // Paginação para períodos de compra
+  const contatosTotalItems = contatos.length
+  const contatosTotalPages = Math.ceil(
+    contatosTotalItems / contatosItemsPerPage
+  )
+  const contatosPaginated = contatos.slice(
+    (contatosPage - 1) * contatosItemsPerPage,
+    contatosPage * contatosItemsPerPage
+  )
+  const handleContatosPrev = () => setContatosPage(p => Math.max(1, p - 1))
+  const handleContatosNext = () =>
+    setContatosPage(p => Math.min(contatosTotalPages, p + 1))
   return (
     <Container>
       <Sidebar>
@@ -224,25 +224,8 @@ export default function Dashboard() {
         <div style={{ flex: 1 }} />
         <SidebarVersion>v1.0</SidebarVersion>
       </Sidebar>
-      {/* Main content */}
       <Main>
         <Title>Dashboard de Mensagens</Title>
-        <button
-          style={{
-            marginBottom: 16,
-            padding: '8px 18px',
-            background: '#6c63ff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 6,
-            fontWeight: 700,
-            cursor: 'pointer',
-            fontSize: 16
-          }}
-          onClick={handleSincronizar}
-        >
-          Sincronizar Bling
-        </button>
         <Subtitle style={{ color: '#bfc8e2', fontSize: 18, marginBottom: 32 }}>
           Resumo dos envios de WhatsApp
         </Subtitle>
@@ -336,8 +319,13 @@ export default function Dashboard() {
                 </TableHeadRow>
               </thead>
               <tbody>
-                {contatos.map((c, i) => (
-                  <TableRow key={i} $even={i % 2 === 0}>
+                {contatosPaginated.map((c, i) => (
+                  <TableRow
+                    key={i + (contatosPage - 1) * contatosItemsPerPage}
+                    $even={
+                      (i + (contatosPage - 1) * contatosItemsPerPage) % 2 === 0
+                    }
+                  >
                     <Td>{c.nome}</Td>
                     <Td>{c.telefone}</Td>
                     <Td>{c.quantidadePedidos}</Td>
@@ -352,6 +340,24 @@ export default function Dashboard() {
                 ))}
               </tbody>
             </Table>
+            {/* Pagination Controls */}
+            <PaginationControls>
+              <PaginationButton
+                onClick={handleContatosPrev}
+                disabled={contatosPage === 1}
+              >
+                <span style={{ fontSize: 18, marginRight: 4 }}>←</span> Anterior
+              </PaginationButton>
+              <PaginationInfo>
+                Página {contatosPage} de {contatosTotalPages}
+              </PaginationInfo>
+              <PaginationButton
+                onClick={handleContatosNext}
+                disabled={contatosPage === contatosTotalPages}
+              >
+                Próxima <span style={{ fontSize: 18, marginLeft: 4 }}>→</span>
+              </PaginationButton>
+            </PaginationControls>
           </TableWrapper>
         </ChartWrapper>
       </Main>
