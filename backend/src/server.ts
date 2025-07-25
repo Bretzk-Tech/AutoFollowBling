@@ -1,4 +1,5 @@
 import './middlewares/validateEnv'
+import './cronJobs'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import logger from './utils/logger'
@@ -17,7 +18,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }
 
-export default cors(corsOptions)
+app.use(cors(corsOptions))
 
 app.use(express.json())
 
@@ -26,8 +27,6 @@ app.use('/mensagem', mensagemRoutes)
 app.use('/dashboard', dashboardRoutes)
 
 app.use(errorHandler)
-
-import './cronJobs'
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
